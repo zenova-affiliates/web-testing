@@ -1,1651 +1,593 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>LocalWeb Starter — Modern Web Solutions & 3D Digital Experiences</title>
-  <meta name="description" content="LocalWeb Starter - More Visibility » More Customers » More Growth. We design and build high-performance 3D websites, client platforms, and immersive digital experiences." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loopstack</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background-color: #000000;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
 
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+/* 1. Top gradient */
+#top-gradient {
+    position: fixed;
+    top: -30vh;
+    left: 0;
+    width: 100vw;
+    height: auto;
+    display: block;
+    z-index: 0;
+    pointer-events: none;
+}
 
-  <style>
-    /* ─── Reset & Base ─── */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* 2. Hero */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 6vh;
+    width: 95%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.hero-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.8rem;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 2.2rem;
+    letter-spacing: -0.015em;
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+.hero-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    background-color: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 1.3rem 2.5rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+    outline: none;
+}
+.hero-btn:hover {
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+}
+.hero-btn:active {
+    transform: translateY(0);
+}
+.blinking-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #39FF14;
+    border-radius: 50%;
+    position: relative;
+    display: inline-block;
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+.blinking-dot::after {
+    content: '';
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    background-color: rgba(57, 255, 20, 0.45);
+    border-radius: 50%;
+    animation: wave-expand 2s infinite ease-in-out;
+}
+@keyframes pulse-glow {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(0.85);
+        box-shadow: 0 0 4px rgba(57, 255, 20, 0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+        box-shadow: 0 0 12px rgba(57, 255, 20, 0.9);
+    }
+}
+@keyframes wave-expand {
+    0%   { transform: scale(0.6); opacity: 0.9; }
+    100% { transform: scale(2.3); opacity: 0; }
+}
 
-    :root {
-      --bg: #090a0f;
-      --bg-card: rgba(18, 18, 28, 0.82);
-      --bg-card-hover: rgba(26, 26, 40, 0.95);
-      --text: #f0eff4;
-      --text-muted: #9595a8;
-      --accent: #00d4aa;       /* LocalWeb Starter Emerald */
-      --accent-2: #6c63ff;     /* Creative Indigo */
-      --accent-3: #22e69d;     /* Mint Highlight */
-      --border: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(0, 212, 170, 0.35);
-      --font-heading: 'Syne', sans-serif;
-      --font-body: 'Space Grotesk', sans-serif;
-      --font-mono: 'Inter', sans-serif;
-    }
+/* 3. Footer */
+.footer-container {
+    position: fixed;
+    top: 50vh;
+    left: 20px;
+    right: 20px;
+    width: calc(100vw - 40px);
+    transform: translateY(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+}
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+    padding: 0 5px;
+}
+.footer-title {
+    font-family: 'General Sans', -apple-system, sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: -0.015em;
+    margin: 0;
+}
+.footer-title.quote {
+    text-transform: none;
+}
+.footer-divider {
+    border: none;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 1.6rem 0;
+    width: 100%;
+}
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 5px;
+}
+.footer-socials {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    flex: 1;
+}
+.social-icon {
+    color: rgba(255, 255, 255, 0.55);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+.social-icon:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+.footer-links {
+    display: flex;
+    gap: 2.8rem;
+    justify-content: center;
+    align-items: center;
+    flex: 2;
+}
+.footer-link {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.footer-link:hover {
+    opacity: 0.75;
+    transform: translateY(-1px);
+}
+.footer-copyright {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.45);
+    text-align: right;
+    flex: 1;
+    letter-spacing: 0.02em;
+}
 
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: var(--accent) var(--bg);
-      -webkit-tap-highlight-color: transparent;
-    }
+/* 4. Giant wordmark */
+.footer-logo-wrap {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    margin: 0;
+}
+.footer-logo-text {
+    font-family: 'General Sans', -apple-system, sans-serif;
+    font-size: 21.9vw;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    margin-right: -0.03em;
+    transform: translateX(-20px);
+    line-height: 0.8;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    text-align: center;
+    width: 100%;
+    pointer-events: none;
+    opacity: 0.95;
+    text-shadow: none;
+    white-space: nowrap;
+}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      overflow-x: hidden;
-      line-height: 1.6;
-      width: 100%;
-      min-height: 100vh;
-    }
+/* 5. Background video */
+.video-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 90vh;
+    overflow: hidden;
+    z-index: -1;
+}
+#bg-video {
+    width: 100%;
+    height: 110%;
+    object-fit: cover;
+    display: block;
+    transform: translateY(0%);
+}
 
-    ::selection {
-      background: var(--accent);
-      color: #000;
-    }
+/* 6. Custom cursor */
+.glass-cursor-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+    pointer-events: none;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 9999px;
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    will-change: transform, opacity;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-cursor-card.active { opacity: 1; }
+.glass-cursor-card.dark-mode {
+    background: rgba(0, 0, 0, 0.82);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+.cursor-card-text {
+    font-family: 'General Sans', -apple-system, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: #39FF14;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 0 8px rgba(57, 255, 20, 0.45);
+}
+.cursor-card-text .text-white {
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.cursor-ring-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 48px;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    z-index: 99998;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    will-change: transform, opacity;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s ease;
+}
+.cursor-ring-outline.active { opacity: 1; }
+.cursor-ring-outline.expanded {
+    border-color: rgba(255, 255, 255, 0.15);
+}
 
-    a { color: inherit; text-decoration: none; }
+/* Reveal: headline words */
+.hero-title .word-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.15em;
+    margin-bottom: -0.15em;
+}
+.hero-title .word-inner {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(105%);
+    filter: blur(20px);
+    animation: word-reveal-mask 1.3s cubic-bezier(0.05, 0.9, 0.1, 1) forwards;
+}
+@keyframes word-reveal-mask {
+    0%   { opacity: 0; transform: translateY(105%); filter: blur(20px); }
+    30%  { opacity: 1; }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
 
-    /* ─── Three.js Canvas ─── */
-    #three-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* ─── Custom Cursor (Desktop only) ─── */
-    .cursor {
-      width: 24px; height: 24px;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-      mix-blend-mode: screen;
-      box-shadow: 0 0 14px rgba(0, 212, 170, 0.4);
-    }
-    .cursor.hover {
-      width: 48px; height: 48px;
-      background: rgba(0, 212, 170, 0.18);
-      border-color: #fff;
-    }
-
-    @media (hover: none) and (pointer: coarse) {
-      .cursor { display: none !important; }
-    }
-
-    /* ─── Loader ─── */
-    .loader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      flex-direction: column;
-      gap: 20px;
-      padding: 20px;
-    }
-    .loader-logo {
-      width: 76px; height: 76px;
-      border-radius: 50%;
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 25px rgba(0, 212, 170, 0.5);
-      object-fit: cover;
-      animation: pulseLogo 2s infinite ease-in-out;
-    }
-    @keyframes pulseLogo {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 212, 170, 0.4); }
-      50% { transform: scale(1.08); box-shadow: 0 0 35px rgba(0, 212, 170, 0.8); }
-    }
-    .loader-text {
-      font-family: var(--font-heading);
-      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, var(--accent), #fff, var(--accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-align: center;
-    }
-    .loader-bar {
-      width: min(240px, 80vw); height: 3px;
-      background: var(--border);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .loader-bar-inner {
-      width: 0%; height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      border-radius: 3px;
-    }
-
-    /* ─── Navigation ─── */
-    .nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      padding: 18px 6vw;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      background: rgba(9, 10, 15, 0.65);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.3s ease;
-    }
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-    .nav-logo-img {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 16px rgba(0, 212, 170, 0.45);
-      object-fit: cover;
-      flex-shrink: 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .nav-brand:hover .nav-logo-img {
-      transform: scale(1.06) rotate(5deg);
-      box-shadow: 0 0 22px rgba(0, 212, 170, 0.7);
-    }
-    .nav-title {
-      font-family: var(--font-heading);
-      font-size: 1.15rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      line-height: 1.1;
-    }
-    .nav-title .brand-gradient {
-      background: linear-gradient(135deg, var(--accent), #fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .nav-tagline {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      color: var(--accent);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-      align-items: center;
-    }
-    .nav-links a {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      position: relative;
-      padding: 6px 0;
-      color: var(--text-muted);
-      transition: color 0.3s ease;
-    }
-    .nav-links a:hover {
-      color: var(--accent);
-    }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 0%; height: 2px;
-      background: var(--accent);
-      transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .nav-links a:hover::after { width: 100%; }
-
-    .nav-cta-btn {
-      padding: 8px 18px !important;
-      border: 1px solid var(--accent);
-      border-radius: 24px;
-      color: var(--accent) !important;
-      font-weight: 600 !important;
-      transition: all 0.3s ease !important;
-    }
-    .nav-cta-btn::after { display: none !important; }
-    .nav-cta-btn:hover {
-      background: var(--accent);
-      color: #000 !important;
-      box-shadow: 0 0 16px rgba(0, 212, 170, 0.4);
-    }
-
-    /* Mobile Menu Toggle */
-    .menu-toggle {
-      display: none;
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      width: 44px; height: 44px;
-      padding: 10px 8px;
-      cursor: pointer;
-      flex-direction: column;
-      justify-content: space-between;
-      z-index: 110;
-    }
-    .menu-toggle span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-    .menu-toggle.active span:nth-child(1) {
-      transform: translateY(8px) rotate(45deg);
-      background: var(--accent);
-    }
-    .menu-toggle.active span:nth-child(2) {
-      opacity: 0;
-    }
-    .menu-toggle.active span:nth-child(3) {
-      transform: translateY(-8px) rotate(-45deg);
-      background: var(--accent);
-    }
-
-    /* Mobile Nav Drawer */
-    .mobile-drawer {
-      position: fixed;
-      top: 0; right: -100%;
-      width: 82%;
-      max-width: 320px;
-      height: 100vh;
-      background: rgba(14, 15, 23, 0.96);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-left: 1px solid var(--border);
-      z-index: 105;
-      padding: 100px 32px 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
-    }
-    .mobile-drawer.open { right: 0; }
-    .mobile-drawer a {
-      font-family: var(--font-heading);
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text);
-      display: block;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .mobile-drawer a:hover { color: var(--accent); }
-    .mobile-drawer .drawer-cta {
-      margin-top: auto;
-      text-align: center;
-      background: var(--accent);
-      color: #000;
-      border-radius: 30px;
-      padding: 14px;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 700;
-      border: none;
-    }
-    .drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 104;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .drawer-backdrop.active { opacity: 1; pointer-events: auto; }
-
-    /* ─── Sections ─── */
-    .section {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 130px 8vw 100px;
-    }
-
-    /* ─── Hero ─── */
-    .hero {
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 22px;
-    }
-    .hero-badge {
-      font-family: var(--font-mono);
-      font-size: clamp(0.7rem, 2vw, 0.85rem);
-      color: var(--accent);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 6px 14px;
-      background: rgba(0, 212, 170, 0.08);
-      border: 1px solid rgba(0, 212, 170, 0.25);
-      border-radius: 30px;
-    }
-    .hero-badge-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px var(--accent);
-      animation: blinkDot 2s infinite ease-in-out;
-    }
-    @keyframes blinkDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
-    .hero-title {
-      font-family: var(--font-heading);
-      font-size: clamp(2.6rem, 7.5vw, 6.8rem);
-      font-weight: 800;
-      line-height: 1.02;
-      letter-spacing: -0.03em;
-    }
-    .hero-title .line {
-      display: block;
-      overflow: hidden;
-    }
-    .hero-title .line span {
-      display: inline-block;
-    }
-    .hero-title .gradient {
-      background: linear-gradient(135deg, var(--accent), #fff, var(--accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-size: 250% 250%;
-      animation: gradientShift 6s ease infinite;
-    }
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    .hero-tagline-text {
-      font-family: var(--font-mono);
-      font-size: clamp(0.85rem, 2vw, 1.15rem);
-      color: var(--accent-3);
-      letter-spacing: 0.08em;
-      font-weight: 600;
-    }
-    .hero-description {
-      font-size: clamp(0.95rem, 2vw, 1.2rem);
-      color: var(--text-muted);
-      max-width: 580px;
-      line-height: 1.8;
-      font-weight: 300;
-    }
-    .hero-cta {
-      display: flex;
-      gap: 16px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 15px 32px;
-      border: 1px solid var(--accent);
-      border-radius: 40px;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text);
-      position: relative;
-      overflow: hidden;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all 0.35s ease;
-      text-decoration: none;
-    }
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: var(--accent);
-      transition: left 0.35s ease;
-      z-index: -1;
-    }
-    .btn:hover::before { left: 0; }
-    .btn:hover {
-      color: #000;
-      box-shadow: 0 0 25px rgba(0, 212, 170, 0.4);
-    }
-    .btn-filled {
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
-    }
-    .btn-filled::before { background: #fff; }
-    .btn-filled:hover { color: #000; }
-
-    .scroll-indicator {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      pointer-events: none;
-    }
-    .scroll-line {
-      width: 2px; height: 42px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 1; transform: scaleY(1); }
-      50% { opacity: 0.3; transform: scaleY(0.5); }
-    }
-
-    /* ─── About Section ─── */
-    .about {
-      display: flex;
-      gap: 60px;
-      align-items: center;
-    }
-    .about-left { flex: 1.1; }
-    .about-right { flex: 0.9; }
-
-    .section-label {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-label::before {
-      content: '';
-      display: inline-block;
-      width: 28px; height: 2px;
-      background: var(--accent);
-    }
-    .section-heading {
-      font-family: var(--font-heading);
-      font-size: clamp(2rem, 4.2vw, 3.6rem);
-      font-weight: 800;
-      line-height: 1.12;
-      margin-bottom: 24px;
-      letter-spacing: -0.02em;
-    }
-    .section-text {
-      color: var(--text-muted);
-      font-size: 1rem;
-      line-height: 1.85;
-      max-width: 540px;
-      font-weight: 300;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-    .stat-item {
-      padding: 24px 20px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-    .stat-item:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-    }
-    .stat-number {
-      font-family: var(--font-heading);
-      font-size: clamp(2rem, 3.5vw, 2.8rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), #fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stat-label {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 6px;
-    }
-
-    /* Skills */
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 28px;
-    }
-    .skill-tag {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      padding: 8px 16px;
-      border: 1px solid var(--border);
-      border-radius: 30px;
-      background: rgba(18, 18, 28, 0.6);
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-      transition: all 0.3s ease;
-    }
-    .skill-tag:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(0, 212, 170, 0.08);
-      transform: translateY(-2px);
-    }
-
-    /* ─── Marquee ─── */
-    .marquee-section {
-      position: relative;
-      z-index: 1;
-      padding: 32px 0;
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: rgba(9, 10, 15, 0.5);
-    }
-    .marquee-track {
-      display: flex;
-      gap: 50px;
-      animation: marquee 24s linear infinite;
-      width: max-content;
-    }
-    .marquee-item {
-      font-family: var(--font-heading);
-      font-size: clamp(1.8rem, 4vw, 3.2rem);
-      font-weight: 800;
-      white-space: nowrap;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.14);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 25px;
-    }
-    .marquee-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px var(--accent);
-      flex-shrink: 0;
-    }
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* ─── Work Section ─── */
-    .work {
-      flex-direction: column;
-      gap: 50px;
-      align-items: stretch;
-    }
-    .work-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      width: 100%;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 36px;
-      width: 100%;
-    }
-    .project-card {
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      overflow: hidden;
-      background: var(--bg-card);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.35s ease, box-shadow 0.35s ease;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .project-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--accent);
-      box-shadow: 0 16px 40px rgba(0, 212, 170, 0.15);
-    }
-    .project-card:nth-child(2) { transform: translateY(40px); }
-    .project-card:nth-child(2):hover { transform: translateY(32px); }
-
-    .project-image {
-      width: 100%;
-      height: 290px;
-      position: relative;
-      overflow: hidden;
-      background: #0f1018;
-    }
-    .project-image-img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: top center;
-      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-      display: block;
-    }
-    .project-card:hover .project-image-img { transform: scale(1.06); }
-
-    .project-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 35%, rgba(9, 10, 15, 0.95) 95%);
-      pointer-events: none;
-    }
-    .project-badges {
-      position: absolute;
-      top: 18px; left: 18px; right: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 2;
-    }
-    .project-number {
-      font-family: var(--font-heading);
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: #000;
-      background: var(--accent);
-      padding: 4px 10px;
-      border-radius: 20px;
-      letter-spacing: 0.08em;
-    }
-    .project-status {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 4px 10px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .project-info {
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-    .project-title {
-      font-family: var(--font-heading);
-      font-size: 1.55rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-    .project-desc {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-      line-height: 1.65;
-      font-weight: 300;
-      margin-bottom: 16px;
-      flex-grow: 1;
-    }
-    .project-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .project-tag {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      padding: 5px 12px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.03);
-    }
-    .project-link-btn {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 12px 20px;
-      border: 1px solid var(--accent);
-      border-radius: 30px;
-      color: var(--accent);
-      background: rgba(0, 212, 170, 0.06);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-    .project-link-btn:hover {
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0 0 18px rgba(0, 212, 170, 0.4);
-    }
-
-    /* ─── Contact Section ─── */
-    .contact {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 36px;
-    }
-    .contact .section-heading {
-      font-size: clamp(2.2rem, 5.5vw, 4.5rem);
-    }
-    .contact-links {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-      max-width: 900px;
-    }
-    .contact-link {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 16px 28px;
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.3s ease;
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      color: var(--text);
-    }
-    .contact-link:hover {
-      border-color: var(--accent);
-      background: rgba(0, 212, 170, 0.1);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0, 212, 170, 0.2);
-      color: #fff;
-    }
-    .contact-link.highlight {
-      border-color: var(--accent);
-      background: rgba(0, 212, 170, 0.12);
-      box-shadow: 0 0 20px rgba(0, 212, 170, 0.18);
-    }
-    .contact-link.highlight:hover {
-      background: var(--accent);
-      color: #000;
-    }
-    .contact-link svg {
-      width: 20px; height: 20px;
-      flex-shrink: 0;
-    }
-
-    /* ─── Footer ─── */
-    .footer {
-      position: relative;
-      z-index: 1;
-      padding: 32px 8vw;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(9, 10, 15, 0.8);
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .footer-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .footer-logo {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      border: 1px solid var(--accent);
-    }
-    .footer-text {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
-    .footer-time {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--accent);
-    }
-
-    /* ─── Floating Gradient Orbs ─── */
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(130px);
-      opacity: 0.18;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .orb-1 {
-      width: min(600px, 90vw); height: min(600px, 90vw);
-      background: var(--accent);
-      top: -150px; right: -150px;
-    }
-    .orb-2 {
-      width: min(450px, 80vw); height: min(450px, 80vw);
-      background: var(--accent-2);
-      bottom: -100px; left: -100px;
-    }
-    .orb-3 {
-      width: min(500px, 85vw); height: min(500px, 85vw);
-      background: var(--accent-3);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    /* ─── Mobile Optimizations ─── */
-    @media (max-width: 900px) {
-      .projects-grid { grid-template-columns: 1fr; gap: 32px; }
-      .project-card:nth-child(2) { transform: none; }
-      .project-card:nth-child(2):hover { transform: translateY(-8px); }
-      .about { flex-direction: column; gap: 40px; }
-      .about-left, .about-right { width: 100%; }
-    }
-
-    @media (max-width: 768px) {
-      .nav { padding: 14px 5vw; }
-      .nav-links { display: none; }
-      .menu-toggle { display: flex; }
-      .section { padding: 100px 6vw 70px; min-height: auto; }
-      .hero { min-height: 92vh; gap: 18px; }
-      .hero-title { font-size: clamp(2.4rem, 11vw, 3.8rem); line-height: 1.05; }
-      .hero-cta { width: 100%; flex-direction: column; }
-      .btn { width: 100%; text-align: center; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-      .stat-item { padding: 18px 14px; }
-      .project-image { height: 210px; }
-      .contact-links { flex-direction: column; width: 100%; }
-      .contact-link { width: 100%; justify-content: center; }
-      .footer { flex-direction: column; text-align: center; gap: 12px; }
-      .footer-left { justify-content: center; }
-      .scroll-indicator { display: none; }
-    }
-
-    @media (max-width: 480px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .nav-title { font-size: 1rem; }
-    }
-  </style>
+/* Reveal: wordmark letters */
+.footer-logo-text .letter-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    line-height: 0.8;
+}
+.footer-logo-text .letter-inner {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-105%);
+    filter: blur(20px);
+    animation: letter-reveal-mask 1.2s cubic-bezier(0.05, 0.9, 0.1, 1) forwards;
+}
+@keyframes letter-reveal-mask {
+    0%   { opacity: 0; transform: translateX(-105%); filter: blur(20px); }
+    25%  { opacity: 1; }
+    100% { opacity: 0.95; transform: translateX(0); filter: blur(0); }
+}
+</style>
 </head>
 <body>
 
-  <!-- Floating Gradient Orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+<img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/loopstack-f8c64439bf/black_gradient.svg" alt="Top Gradient" id="top-gradient">
 
-  <!-- Custom Cursor (Desktop) -->
-  <div class="cursor" id="cursor"></div>
-
-  <!-- Loader -->
-  <div class="loader" id="loader">
-    <img src="logo.jpg" alt="LocalWeb Starter Logo" class="loader-logo" onerror="this.style.display='none'" />
-    <div class="loader-text">LocalWeb Starter</div>
-    <div class="loader-bar">
-      <div class="loader-bar-inner" id="loader-bar"></div>
-    </div>
-  </div>
-
-  <!-- Three.js Canvas -->
-  <canvas id="three-canvas"></canvas>
-
-  <!-- Navigation -->
-  <nav class="nav" id="nav">
-    <a href="#hero" class="nav-brand hoverable">
-      <img src="logo.jpg" alt="LocalWeb Starter Logo" class="nav-logo-img" onerror="this.style.display='none'" />
-      <div class="nav-title">
-        <span>LocalWeb <span class="brand-gradient">Starter</span></span>
-        <span class="nav-tagline">Visibility • Customers • Growth</span>
-      </div>
-    </a>
-
-    <!-- Desktop Navigation Links -->
-    <ul class="nav-links">
-      <li><a href="#about" class="hoverable">About</a></li>
-      <li><a href="#work" class="hoverable">Client Projects</a></li>
-      <li><a href="#contact" class="hoverable">Contact</a></li>
-      <li><a href="tel:03316479439" class="nav-cta-btn hoverable">Call: 03316479439</a></li>
-    </ul>
-
-    <!-- Mobile Hamburger Toggle -->
-    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
-      <span></span>
-      <span></span>
-      <span></span>
+<main class="hero-content">
+    <h1 class="hero-title">Apply Now to be part <br> of the closed beta</h1>
+    <button class="hero-btn">
+        <span class="btn-text">Book a demo</span>
+        <span class="blinking-dot"></span>
     </button>
-  </nav>
+</main>
 
-  <!-- Mobile Drawer -->
-  <div class="drawer-backdrop" id="drawer-backdrop"></div>
-  <aside class="mobile-drawer" id="mobile-drawer">
-    <a href="#hero" class="drawer-link">Home</a>
-    <a href="#about" class="drawer-link">About Agency</a>
-    <a href="#work" class="drawer-link">Client Projects</a>
-    <a href="#contact" class="drawer-link">Contact Us</a>
-    <a href="tel:03316479439" class="drawer-cta">📞 03316479439</a>
-  </aside>
-
-  <!-- ═══════════ HERO ═══════════ -->
-  <section class="section hero" id="hero">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      LocalWeb Starter • Agency
-    </div>
-    <h1 class="hero-title">
-      <span class="line"><span>More Visibility.</span></span>
-      <span class="line"><span class="gradient">More Customers.</span></span>
-      <span class="line"><span>More Growth.</span></span>
-    </h1>
-    <div class="hero-tagline-text">High-Performance 3D Web Development & Client Platforms</div>
-    <p class="hero-description">
-      We build conversion-driven websites, custom web applications, and immersive 3D digital experiences designed to showcase your brand, captivate customers, and scale your business.
-    </p>
-    <div class="hero-cta">
-      <a href="#work" class="btn btn-filled hoverable">
-        View Client Work
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="tel:03316479439" class="btn hoverable">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        03316479439
-      </a>
-      <a href="mailto:localwebstarter@gmail.com" class="btn hoverable">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        Email Us
-      </a>
-    </div>
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
-      Scroll
-    </div>
-  </section>
-
-  <!-- ═══════════ ABOUT ═══════════ -->
-  <section class="section about" id="about">
-    <div class="about-left">
-      <div class="section-label">01 — About LocalWeb Starter</div>
-      <h2 class="section-heading">
-        Engineered for speed,<br/>designed for<br/>conversions
-      </h2>
-      <p class="section-text">
-        At <strong>LocalWeb Starter</strong>, we believe local and modern businesses deserve world-class web presence. We fuse interactive 3D graphics, seamless mobile responsiveness, and clean modern aesthetics into high-performing websites that turn visitors into paying clients.
-      </p>
-      <p class="section-text" style="margin-top: 14px;">
-        From custom medical equipment platforms to bespoke startup web solutions, every line of code is optimized for maximum visibility, organic trust, and rapid business growth.
-      </p>
-      <div class="skills-list">
-        <span class="skill-tag hoverable">Next.js & React</span>
-        <span class="skill-tag hoverable">Three.js / WebGL</span>
-        <span class="skill-tag hoverable">High-Conversion UI</span>
-        <span class="skill-tag hoverable">Mobile-First Design</span>
-        <span class="skill-tag hoverable">GSAP Animations</span>
-        <span class="skill-tag hoverable">Tailwind CSS</span>
-        <span class="skill-tag hoverable">Vercel Deployment</span>
-        <span class="skill-tag hoverable">SEO & Speed Optimization</span>
-      </div>
-    </div>
-    <div class="about-right">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-number" data-count="50">0</div>
-          <div class="stat-label">Websites Launched</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" data-count="100">0</div>
-          <div class="stat-label">% Responsive Speed</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" data-count="35">0</div>
-          <div class="stat-label">Satisfied Clients</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" data-count="24">0</div>
-          <div class="stat-label">7 Support Available</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════ MARQUEE ═══════════ -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <span class="marquee-item">More Visibility <span class="marquee-dot"></span></span>
-      <span class="marquee-item">More Customers <span class="marquee-dot"></span></span>
-      <span class="marquee-item">More Growth <span class="marquee-dot"></span></span>
-      <span class="marquee-item">LocalWeb Starter <span class="marquee-dot"></span></span>
-      <span class="marquee-item">High Speed Web <span class="marquee-dot"></span></span>
-      <span class="marquee-item">3D Interactive <span class="marquee-dot"></span></span>
-      <!-- Duplicate for seamless infinite loop -->
-      <span class="marquee-item">More Visibility <span class="marquee-dot"></span></span>
-      <span class="marquee-item">More Customers <span class="marquee-dot"></span></span>
-      <span class="marquee-item">More Growth <span class="marquee-dot"></span></span>
-      <span class="marquee-item">LocalWeb Starter <span class="marquee-dot"></span></span>
-      <span class="marquee-item">High Speed Web <span class="marquee-dot"></span></span>
-      <span class="marquee-item">3D Interactive <span class="marquee-dot"></span></span>
-    </div>
-  </div>
-
-  <!-- ═══════════ WORK ═══════════ -->
-  <section class="section work" id="work">
-    <div class="work-header">
-      <div>
-        <div class="section-label">02 — Selected Client Work</div>
-        <h2 class="section-heading">Featured<br/>Projects</h2>
-      </div>
-      <p class="section-text" style="max-width: 380px;">
-        Real projects built for real clients. Click any project to explore the live application.
-      </p>
+<footer class="footer-container">
+    <div class="footer-top">
+        <h2 class="footer-title">Stay in Touch</h2>
+        <h2 class="footer-title quote">Think. Build. Repeat.</h2>
     </div>
 
-    <div class="projects-grid">
-      <!-- Project 1: Endo Tech (Client Project) -->
-      <div class="project-card hoverable">
-        <div class="project-image">
-          <img 
-            src="endo-tech.jpg" 
-            alt="Endo Tech Website Screenshot" 
-            class="project-image-img"
-            onerror="this.src='https://s0.wp.com/mshots/v1/https%3A%2F%2Fendo-tech.vercel.app%2F?w=1200'"
-            loading="lazy"
-          />
-          <div class="project-overlay"></div>
-          <div class="project-badges">
-            <span class="project-number">01</span>
-            <span class="project-status">Client Project • Live</span>
-          </div>
-        </div>
-        <div class="project-info">
-          <h3 class="project-title">Endo Tech</h3>
-          <p class="project-desc">
-            Medical endoscopy & surgical equipment portal developed for Endo Tech. Features responsive product catalog, clinical service breakdowns, modern branding, and fast contact conversion flows.
-          </p>
-          <div class="project-tags">
-            <span class="project-tag">Client Project</span>
-            <span class="project-tag">Next.js / Vercel</span>
-            <span class="project-tag">Medical UI</span>
-            <span class="project-tag">Responsive</span>
-          </div>
-          <a href="https://endo-tech.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link-btn hoverable">
-            Visit Endo Tech Live
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
-      </div>
+    <hr class="footer-divider">
 
-      <!-- Project 2: Xerena (Client Project) -->
-      <div class="project-card hoverable">
-        <div class="project-image">
-          <img 
-            src="xerena.jpg" 
-            alt="Xerena Website Screenshot" 
-            class="project-image-img"
-            onerror="this.src='https://s0.wp.com/mshots/v1/https%3A%2F%2Fxerena-nine.vercel.app%2F?w=1200'"
-            loading="lazy"
-          />
-          <div class="project-overlay"></div>
-          <div class="project-badges">
-            <span class="project-number">02</span>
-            <span class="project-status">Client Project • Live</span>
-          </div>
+    <div class="footer-bottom">
+        <div class="footer-socials">
+            <a href="#" aria-label="LinkedIn" class="social-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <a href="#" aria-label="X" class="social-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="social-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
         </div>
-        <div class="project-info">
-          <h3 class="project-title">Xerena</h3>
-          <p class="project-desc">
-            Modern digital platform created for Xerena. Built with sleek typography, interactive animation layouts, seamless mobile navigation, and optimized for high-engagement customer acquisition.
-          </p>
-          <div class="project-tags">
-            <span class="project-tag">Client Project</span>
-            <span class="project-tag">Web Application</span>
-            <span class="project-tag">React / Tailwind</span>
-            <span class="project-tag">High Performance</span>
-          </div>
-          <a href="https://xerena-nine.vercel.app/" target="_blank" rel="noopener noreferrer" class="project-link-btn hoverable">
-            Visit Xerena Live
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
-      </div>
 
-      <!-- Project 3: Synthwave Studio -->
-      <div class="project-card hoverable">
-        <div class="project-image">
-          <div class="project-image-img" style="background: linear-gradient(135deg, #180928, #ff6b9d); display:flex; align-items:center; justify-content:center;">
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-          </div>
-          <div class="project-overlay"></div>
-          <div class="project-badges">
-            <span class="project-number">03</span>
-            <span class="project-status">Interactive App</span>
-          </div>
-        </div>
-        <div class="project-info">
-          <h3 class="project-title">Synthwave Studio</h3>
-          <p class="project-desc">
-            Browser-based digital synthesizer and audio engineering workstation with WebAudio API, real-time parametric filters, and collaborative session sync.
-          </p>
-          <div class="project-tags">
-            <span class="project-tag">TypeScript</span>
-            <span class="project-tag">WebAudio API</span>
-            <span class="project-tag">Creative Dev</span>
-          </div>
-          <a href="#contact" class="project-link-btn hoverable">
-            Request Similar Build
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
+        <nav class="footer-links">
+            <a href="#about" class="footer-link">About</a>
+            <a href="#features" class="footer-link">Features</a>
+            <a href="#pricing" class="footer-link">Pricing</a>
+            <a href="#contact" class="footer-link">Contact</a>
+        </nav>
 
-      <!-- Project 4: Quantum Commerce -->
-      <div class="project-card hoverable">
-        <div class="project-image">
-          <div class="project-image-img" style="background: linear-gradient(135deg, #091a24, #00d4aa); display:flex; align-items:center; justify-content:center;">
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          </div>
-          <div class="project-overlay"></div>
-          <div class="project-badges">
-            <span class="project-number">04</span>
-            <span class="project-status">3D E-Commerce</span>
-          </div>
+        <div class="footer-copyright">
+            © 2026 Loopstack
         </div>
-        <div class="project-info">
-          <h3 class="project-title">Quantum Commerce</h3>
-          <p class="project-desc">
-            Next-generation shopping experience with interactive 3D product previews, personalized catalog recommendations, and lightning-fast checkout.
-          </p>
-          <div class="project-tags">
-            <span class="project-tag">Next.js</span>
-            <span class="project-tag">Three.js</span>
-            <span class="project-tag">Stripe</span>
-          </div>
-          <a href="#contact" class="project-link-btn hoverable">
-            Request Similar Build
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
     </div>
-  </section>
+</footer>
 
-  <!-- ═══════════ CONTACT ═══════════ -->
-  <section class="section contact" id="contact">
-    <div class="section-label">03 — Get In Touch</div>
-    <h2 class="section-heading">
-      Let's Grow Your<br/>Business <span class="gradient">Online</span>
-    </h2>
-    <p class="section-text" style="max-width: 580px; text-align: center;">
-      Ready to boost your visibility and get more customers? Contact <strong>LocalWeb Starter</strong> today for a free consultation or custom quote.
-    </p>
-    <div class="contact-links">
-      <!-- Phone Call / WhatsApp (Replaced LinkedIn) -->
-      <a href="tel:03316479439" class="contact-link highlight hoverable">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-        </svg>
-        <span><strong>Call:</strong> 03316479439</span>
-      </a>
+<div class="footer-logo-wrap">
+    <h2 class="footer-logo-text">Loopstack</h2>
+</div>
 
-      <!-- WhatsApp Direct Link -->
-      <a href="https://wa.me/923316479439" target="_blank" rel="noopener noreferrer" class="contact-link highlight hoverable">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-        </svg>
-        <span><strong>WhatsApp:</strong> 03316479439</span>
-      </a>
+<div class="video-container">
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://api.getlayers.ai/storage/v1/object/public/public/assets/loopstack-f8c64439bf/flower.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
+</div>
 
-      <!-- Gmail -->
-      <a href="mailto:localwebstarter@gmail.com" class="contact-link hoverable">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-        </svg>
-        <span>localwebstarter@gmail.com</span>
-      </a>
+<div id="cursor-ring" class="cursor-ring-outline"></div>
 
-      <!-- GitHub -->
-      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="contact-link hoverable">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77a5.07 5.07 0 0 0-.09-3.77S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-        </svg>
-        <span>GitHub</span>
-      </a>
-    </div>
-  </section>
+<div id="glass-card" class="glass-cursor-card">
+    <span class="cursor-card-text"><span class="text-white">Say</span> Hello!</span>
+</div>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-left">
-      <img src="logo.jpg" alt="LocalWeb Starter" class="footer-logo" onerror="this.style.display='none'" />
-      <div class="footer-text">
-        © 2026 <strong>LocalWeb Starter</strong>. More Visibility » More Customers » More Growth.
-      </div>
-    </div>
-    <div class="footer-time" id="footer-time"></div>
-  </footer>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const logoText = document.querySelector('.footer-logo-text');
 
-  <!-- ═══════════ JAVASCRIPT ═══════════ -->
-  <script>
-    // ─────────────────────────────────────────────
-    // 1. THREE.JS — Animated 3D Interactive Canvas
-    // ─────────────────────────────────────────────
-    (function initThree() {
-      const canvas = document.getElementById('three-canvas');
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      
-      const isMobile = window.innerWidth <= 768;
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+    if (logoText) {
+        const text = logoText.textContent.trim();
+        logoText.innerHTML = ''; // Очищаем контейнер
 
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 5;
+        // Разделяем слово на отдельные буквы и оборачиваем каждую в двойной span для маски
+        [...text].forEach((char, index) => {
+            // Внешний span выступает в роли маски (overflow: hidden)
+            const wrapper = document.createElement('span');
+            wrapper.className = 'letter-wrapper';
 
-      // ── Particle System ──
-      const particleCount = isMobile ? 1400 : 2500;
-      const positions = new Float32Array(particleCount * 3);
-      const colors = new Float32Array(particleCount * 3);
-      const sizes = new Float32Array(particleCount);
+            // Внутренний span содержит букву и анимируется слева направо
+            const inner = document.createElement('span');
+            inner.textContent = char === ' ' ? '\u00A0' : char; // Обрабатываем пробелы
+            inner.className = 'letter-inner';
 
-      const colorPalette = [
-        new THREE.Color(0x00d4aa), // LocalWeb Emerald
-        new THREE.Color(0x6c63ff), // Indigo
-        new THREE.Color(0x22e69d), // Mint
-        new THREE.Color(0x4ecdc4), // Cyan
-      ];
+            // Задаем задержку анимации для каждой буквы:
+            // 9 букв, задержка шага 0.09с, длительность анимации 1.2с.
+            // Последняя буква закончит выдвигаться ровно на отметке: 0.72с (задержка) + 1.2с (анимация) = 1.92 секунды!
+            inner.style.animationDelay = `${index * 0.09}s`;
 
-      for (let i = 0; i < particleCount; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * 20;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
-
-        const col = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-        colors[i * 3] = col.r;
-        colors[i * 3 + 1] = col.g;
-        colors[i * 3 + 2] = col.b;
-
-        sizes[i] = Math.random() * 3 + 1;
-      }
-
-      const particleGeometry = new THREE.BufferGeometry();
-      particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-      particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-      const particleMaterial = new THREE.PointsMaterial({
-        size: isMobile ? 0.045 : 0.035,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.75,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-
-      const particles = new THREE.Points(particleGeometry, particleMaterial);
-      scene.add(particles);
-
-      // ── Wireframe Icosahedron ──
-      const icoGeometry = new THREE.IcosahedronGeometry(isMobile ? 1.4 : 1.8, 1);
-      const icoMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00d4aa,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.09,
-      });
-      const icosahedron = new THREE.Mesh(icoGeometry, icoMaterial);
-      scene.add(icosahedron);
-
-      // ── Torus Knot ──
-      const torusGeometry = new THREE.TorusKnotGeometry(0.8, 0.25, 100, 16);
-      const torusMaterial = new THREE.MeshBasicMaterial({
-        color: 0x6c63ff,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.06,
-      });
-      const torusKnot = new THREE.Mesh(torusGeometry, torusMaterial);
-      torusKnot.position.set(isMobile ? 2 : 4, -2, -3);
-      scene.add(torusKnot);
-
-      // ── Mouse & Touch Tracking for 3D Interactivity ──
-      let mouseX = 0, mouseY = 0;
-      let targetMouseX = 0, targetMouseY = 0;
-
-      function updatePointer(x, y) {
-        targetMouseX = (x / window.innerWidth - 0.5) * 2;
-        targetMouseY = (y / window.innerHeight - 0.5) * 2;
-      }
-
-      window.addEventListener('mousemove', (e) => updatePointer(e.clientX, e.clientY), { passive: true });
-      window.addEventListener('touchmove', (e) => {
-        if (e.touches.length > 0) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
-      window.addEventListener('touchstart', (e) => {
-        if (e.touches.length > 0) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
-
-      // ── Scroll-linked rotation ──
-      let scrollY = 0;
-      window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
-
-      // ── Responsive Resize ──
-      window.addEventListener('resize', () => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-      });
-
-      // ── Animation Loop ──
-      const clock = new THREE.Clock();
-      function animate() {
-        requestAnimationFrame(animate);
-        const elapsed = clock.getElapsedTime();
-
-        // Smooth interpolation for mouse/touch
-        mouseX += (targetMouseX - mouseX) * 0.05;
-        mouseY += (targetMouseY - mouseY) * 0.05;
-
-        // Particle field rotation
-        particles.rotation.y = elapsed * 0.03 + scrollY * 0.0003;
-        particles.rotation.x = elapsed * 0.02;
-
-        // Subtle particle undulation
-        const posArr = particleGeometry.attributes.position.array;
-        for (let i = 0; i < particleCount; i += 2) {
-          const ix = i * 3;
-          posArr[ix + 1] += Math.sin(elapsed + posArr[ix]) * 0.0004;
-        }
-        particleGeometry.attributes.position.needsUpdate = true;
-
-        // Geometries rotation
-        icosahedron.rotation.x = elapsed * 0.1 + mouseY * 0.2;
-        icosahedron.rotation.y = elapsed * 0.14 + mouseX * 0.2;
-
-        torusKnot.rotation.x = elapsed * 0.18;
-        torusKnot.rotation.y = elapsed * 0.12;
-
-        // Camera responsive follow
-        camera.position.x += (mouseX * 0.35 - camera.position.x) * 0.02;
-        camera.position.y += (-mouseY * 0.35 - camera.position.y) * 0.02;
-        camera.lookAt(scene.position);
-
-        renderer.render(scene, camera);
-      }
-      animate();
-    })();
-
-    // ─────────────────────────────────────────────
-    // 2. CUSTOM CURSOR (Active on desktop)
-    // ─────────────────────────────────────────────
-    (function initCursor() {
-      const cursor = document.getElementById('cursor');
-      if (!cursor) return;
-
-      let curX = 0, curY = 0;
-      window.addEventListener('mousemove', (e) => {
-        curX = e.clientX;
-        curY = e.clientY;
-      });
-
-      function updateCursor() {
-        cursor.style.left = curX + 'px';
-        cursor.style.top = curY + 'px';
-        requestAnimationFrame(updateCursor);
-      }
-      updateCursor();
-
-      document.querySelectorAll('.hoverable, a, button').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-      });
-    })();
-
-    // ─────────────────────────────────────────────
-    // 3. MOBILE MENU DRAWER
-    // ─────────────────────────────────────────────
-    (function initMobileMenu() {
-      const menuToggle = document.getElementById('menu-toggle');
-      const mobileDrawer = document.getElementById('mobile-drawer');
-      const backdrop = document.getElementById('drawer-backdrop');
-      const drawerLinks = document.querySelectorAll('.drawer-link, .drawer-cta');
-
-      function toggleMenu() {
-        const isOpen = mobileDrawer.classList.toggle('open');
-        menuToggle.classList.toggle('active', isOpen);
-        backdrop.classList.toggle('active', isOpen);
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-      }
-
-      function closeMenu() {
-        mobileDrawer.classList.remove('open');
-        menuToggle.classList.remove('active');
-        backdrop.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-
-      menuToggle.addEventListener('click', toggleMenu);
-      backdrop.addEventListener('click', closeMenu);
-      drawerLinks.forEach(link => link.addEventListener('click', closeMenu));
-    })();
-
-    // ─────────────────────────────────────────────
-    // 4. LOADER & GSAP INTRO
-    // ─────────────────────────────────────────────
-    (function initLoader() {
-      const loader = document.getElementById('loader');
-      const bar = document.getElementById('loader-bar');
-
-      gsap.to(bar, {
-        width: '100%',
-        duration: 1.6,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          gsap.to(loader, {
-            yPercent: -100,
-            duration: 0.8,
-            ease: 'power3.inOut',
-            onComplete: () => {
-              loader.style.display = 'none';
-              startPageAnimations();
-            }
-          });
-        }
-      });
-    })();
-
-    // ─────────────────────────────────────────────
-    // 5. GSAP SCROLL ANIMATIONS
-    // ─────────────────────────────────────────────
-    function startPageAnimations() {
-      gsap.registerPlugin(ScrollTrigger);
-
-      // ── Hero Entrance ──
-      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      heroTl
-        .from('.hero-badge', { y: 25, opacity: 0, duration: 0.7 })
-        .from('.hero-title .line span', {
-          y: '115%',
-          duration: 1.1,
-          stagger: 0.14,
-          ease: 'power4.out'
-        }, '-=0.4')
-        .from('.hero-tagline-text', { y: 20, opacity: 0, duration: 0.6 }, '-=0.5')
-        .from('.hero-description', { y: 25, opacity: 0, duration: 0.7 }, '-=0.5')
-        .from('.hero-cta .btn', { y: 20, opacity: 0, duration: 0.5, stagger: 0.1 }, '-=0.4')
-        .from('.scroll-indicator', { opacity: 0, duration: 0.8 }, '-=0.2')
-        .from('.nav', { y: -30, opacity: 0, duration: 0.6 }, '-=0.8');
-
-      // ── About Section ──
-      gsap.from('.about .section-label', {
-        scrollTrigger: { trigger: '.about', start: 'top 80%', toggleActions: 'play none none reverse' },
-        x: -30, opacity: 0, duration: 0.7,
-      });
-      gsap.from('.about .section-heading', {
-        scrollTrigger: { trigger: '.about', start: 'top 75%', toggleActions: 'play none none reverse' },
-        y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
-      });
-      gsap.from('.about .section-text', {
-        scrollTrigger: { trigger: '.about', start: 'top 70%', toggleActions: 'play none none reverse' },
-        y: 25, opacity: 0, duration: 0.7, stagger: 0.15,
-      });
-      gsap.from('.skill-tag', {
-        scrollTrigger: { trigger: '.skills-list', start: 'top 85%', toggleActions: 'play none none reverse' },
-        y: 15, opacity: 0, duration: 0.4, stagger: 0.04, ease: 'power2.out',
-      });
-
-      // ── Stats Counter ──
-      document.querySelectorAll('.stat-number').forEach(stat => {
-        const target = parseInt(stat.getAttribute('data-count'));
-        gsap.to(stat, {
-          scrollTrigger: { trigger: stat, start: 'top 85%', toggleActions: 'play none none reverse' },
-          innerText: target,
-          duration: 2,
-          snap: { innerText: 1 },
-          ease: 'power2.out',
-          onUpdate: function() {
-            const val = Math.round(parseFloat(stat.textContent));
-            stat.textContent = val + (val === 100 ? '%' : '+');
-          }
+            wrapper.appendChild(inner);
+            logoText.appendChild(wrapper);
         });
-      });
-
-      gsap.from('.stat-item', {
-        scrollTrigger: { trigger: '.stats-grid', start: 'top 85%', toggleActions: 'play none none reverse' },
-        y: 35, opacity: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out',
-      });
-
-      // ── Work Section ──
-      gsap.from('.work .section-label', {
-        scrollTrigger: { trigger: '.work', start: 'top 80%', toggleActions: 'play none none reverse' },
-        x: -30, opacity: 0, duration: 0.7,
-      });
-      gsap.from('.work .section-heading', {
-        scrollTrigger: { trigger: '.work', start: 'top 75%', toggleActions: 'play none none reverse' },
-        y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
-      });
-      gsap.from('.project-card', {
-        scrollTrigger: { trigger: '.projects-grid', start: 'top 82%', toggleActions: 'play none none reverse' },
-        y: 60, opacity: 0, duration: 0.8, stagger: 0.18, ease: 'power3.out',
-      });
-
-      // ── Contact Section ──
-      gsap.from('.contact .section-label', {
-        scrollTrigger: { trigger: '.contact', start: 'top 80%', toggleActions: 'play none none reverse' },
-        y: 20, opacity: 0, duration: 0.7,
-      });
-      gsap.from('.contact .section-heading', {
-        scrollTrigger: { trigger: '.contact', start: 'top 75%', toggleActions: 'play none none reverse' },
-        y: 40, opacity: 0, duration: 1, ease: 'power3.out',
-      });
-      gsap.from('.contact-link', {
-        scrollTrigger: { trigger: '.contact-links', start: 'top 85%', toggleActions: 'play none none reverse' },
-        y: 25, opacity: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out',
-      });
-
-      // ── Parallax Orbs ──
-      gsap.to('.orb-1', {
-        scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 1 },
-        y: -350, x: -150,
-      });
-      gsap.to('.orb-2', {
-        scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 1 },
-        y: -250, x: 100,
-      });
-
-      // Refresh ScrollTrigger for accurate mobile trigger points
-      ScrollTrigger.refresh();
     }
 
-    // ─────────────────────────────────────────────
-    // 6. LIVE CLOCK
-    // ─────────────────────────────────────────────
-    (function initClock() {
-      function updateTime() {
-        const now = new Date();
-        const opts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-        const el = document.getElementById('footer-time');
-        if (el) el.textContent = 'Active • ' + now.toLocaleTimeString('en-US', opts);
-      }
-      updateTime();
-      setInterval(updateTime, 1000);
-    })();
+    // Разделение верхнего заголовка на слова для анимации появления снизу вверх из маски с блюром
+    const heroTitle = document.querySelector('.hero-title');
+    if (heroTitle) {
+        const text = heroTitle.innerHTML;
+        // Разделяем по пробелам, сохраняя теги <br>
+        const parts = text.split(/(\s+|<br\s*\/?>)/i);
+        heroTitle.innerHTML = '';
 
-    // ─────────────────────────────────────────────
-    // 7. SMOOTH SCROLL FOR ANCHOR LINKS
-    // ─────────────────────────────────────────────
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href === '#') return;
-        const target = document.querySelector(href);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        let wordIndex = 0;
+        parts.forEach(part => {
+            if (part.trim() === '') {
+                // Обычный пробел между словами
+                heroTitle.appendChild(document.createTextNode(' '));
+            } else if (part.toLowerCase().startsWith('<br')) {
+                // Сохраняем перенос строки
+                heroTitle.appendChild(document.createElement('br'));
+            } else {
+                // Обертка-маска (overflow: hidden)
+                const wrapper = document.createElement('span');
+                wrapper.className = 'word-wrapper';
+
+                // Внутреннее слово, сдвинутое вниз и заблюренное
+                const inner = document.createElement('span');
+                inner.className = 'word-inner';
+                inner.textContent = part;
+
+                // Задержка анимации: шаг 0.1с для размеренного, солидного появления
+                inner.style.animationDelay = `${wordIndex * 0.1}s`;
+                wordIndex++;
+
+                wrapper.appendChild(inner);
+                heroTitle.appendChild(wrapper);
+            }
+        });
+    }
+
+    // Летающий оутлайновый белый кружок и стеклянная плашка за курсором (LERP-физика)
+    const glassCard = document.getElementById('glass-card');
+    const cursorRing = document.getElementById('cursor-ring');
+
+    if (glassCard && cursorRing) {
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        // Координаты для плашки (медленное движение)
+        let cardX = mouseX;
+        let cardY = mouseY;
+
+        // Координаты для кружка (более быстрое движение)
+        let ringX = mouseX;
+        let ringY = mouseY;
+
+        let isFirstMove = true;
+        let scale = 0;
+        let targetScale = 0;
+        let isHoveringBtn = false; // Флаг наведения на кнопку Book a Demo
+
+        // Отслеживаем координаты курсора
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            if (isFirstMove) {
+                // Мгновенно позиционируем при первом движении, чтобы избежать "прыжка"
+                cardX = mouseX;
+                cardY = mouseY;
+                ringX = mouseX;
+                ringY = mouseY;
+                isFirstMove = false;
+                glassCard.classList.add('active');
+                cursorRing.classList.add('active');
+            }
+
+            // Показываем элементы только если курсор не находится на кнопке Book a demo
+            if (!isHoveringBtn) {
+                targetScale = 1;
+            }
+        });
+
+        // Плавное скрытие при выходе курсора за пределы экрана
+        document.addEventListener('mouseleave', () => {
+            targetScale = 0;
+        });
+
+        // Плавное появление при возвращении курсора в окно
+        document.addEventListener('mouseenter', () => {
+            if (!isHoveringBtn) {
+                targetScale = 1;
+            }
+        });
+
+        // Слушатели наведения на кнопку "Book a demo" для переключения режимов
+        const heroBtn = document.querySelector('.hero-btn');
+        if (heroBtn) {
+            heroBtn.addEventListener('mouseenter', () => {
+                isHoveringBtn = true;
+                targetScale = 0; // Плавное скрытие плашки (scale 0)
+                cursorRing.classList.add('expanded'); // Добавляем класс расширения кружка в CSS
+            });
+            heroBtn.addEventListener('mouseleave', () => {
+                isHoveringBtn = false;
+                targetScale = 1; // Плавное возвращение плашки
+                cursorRing.classList.remove('expanded'); // Сброс расширения кружка
+            });
         }
-      });
-    });
-  </script>
+
+        // Системный цикл анимации (60-120 кадров/сек) для сглаживания
+        const updatePhysics = () => {
+            // Мягкое отставание плашки: коэффициент LERP 0.08
+            cardX += (mouseX - cardX) * 0.08;
+            cardY += (mouseY - cardY) * 0.08;
+
+            // Кружок следует за курсором мгновенно и без задержки
+            ringX = mouseX;
+            ringY = mouseY;
+
+            // Интерполируем масштаб для плавного появления/исчезновения
+            scale += (targetScale - scale) * 0.15;
+
+            // Масштаб кружка (если навели на кнопку, он увеличивается до 1.6 через класс expanded)
+            // Но мы всё еще перемножаем его на общий scale, чтобы кружок сжался в 0 при выходе с экрана
+            const currentRingScale = cursorRing.classList.contains('expanded') ? 1.6 * scale : scale;
+
+            // Применяем аппаратную 3D-трансформацию
+            glassCard.style.transform = `translate3d(${cardX}px, ${cardY}px, 0) translate(-50%, -50%) scale(${scale})`;
+            cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${currentRingScale})`;
+
+            requestAnimationFrame(updatePhysics);
+        };
+
+        updatePhysics();
+    }
+});
+</script>
 </body>
 </html>
-
