@@ -1,565 +1,228 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>DigiFront Door</title>
-<meta name="description" content="DigiFront Door crafts bespoke websites with fluid kinetic motion, custom interaction architecture, and conversion-focused engineering.">
-<meta name="theme-color" content="#000000">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--neon:#39FF14;--glow:rgba(57,255,20,.45);--bl:rgba(255,255,255,.3);--bs:rgba(255,255,255,.18);--glass:rgba(255,255,255,.04);--mut:rgba(255,255,255,.8);--sub:rgba(255,255,255,.7);--gs:'General Sans',-apple-system,sans-serif;--pf:'Playfair Display',Georgia,serif;--ease:cubic-bezier(.16,1,.3,1)}
-html{scroll-behavior:smooth}
-body{background:#000;color:#fff;font-family:'Outfit',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--neon);outline-offset:3px}
-/* local gradient + video */
-#top-gradient{position:fixed;inset:0 0 auto 0;height:70vh;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(40,70,50,.35) 0%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#000 0%,rgba(0,0,0,0) 100%)}
-.video-container{position:fixed;bottom:0;left:0;width:100vw;height:90vh;overflow:hidden;z-index:-1;background:radial-gradient(circle at 50% 80%,rgba(20,45,30,.45) 0%,#000 75%)}
-#bg-video{width:100%;height:110%;object-fit:cover;display:block}
-/* header + pill nav */
-.site-header{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:1rem;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:rgba(0,0,0,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--bs)}
-.brand{font-family:var(--gs);font-weight:500;font-size:1.1rem;letter-spacing:-.015em;text-decoration:none;white-space:nowrap}
-.pill-nav{display:flex;gap:.5rem;overflow-x:auto;flex:1;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:2px}
-.pill-nav::-webkit-scrollbar{display:none}
-.pill-nav a{flex:none;scroll-snap-align:start;font-size:.9rem;font-weight:500;text-decoration:none;color:#fff;border:1px solid var(--bl);background:rgba(255,255,255,.05);padding:.55rem 1.05rem;border-radius:9999px;min-height:40px;display:inline-flex;align-items:center;transition:all .25s var(--ease)}
-.pill-nav a:hover{background:#fff;color:#000;border-color:#fff}
-.pill-nav a.active{border-color:var(--neon);color:var(--neon);background:rgba(57,255,20,.1)}
-.pill-nav a.cta{border-color:var(--neon);color:var(--neon)}
-@media(max-width:640px){.site-header{flex-direction:column;align-items:stretch;gap:.45rem}.brand{font-size:1rem}}
-/* hero */
-.hero{position:relative;z-index:2;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;padding:clamp(120px,20vh,170px) 20px 20px}
-.hero-title{font-family:var(--pf);font-size:clamp(2.1rem,6vw,3.4rem);font-weight:400;line-height:1.15;margin-bottom:2.2rem;letter-spacing:-.015em;text-shadow:0 4px 30px rgba(0,0,0,.5)}
-.hero-title .ww{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.15em;margin-bottom:-.15em}
-.hero-title .wi{display:inline-block;opacity:0;transform:translateY(105%);filter:blur(20px);animation:wr 1.3s cubic-bezier(.05,.9,.1,1) forwards}
-@keyframes wr{30%{opacity:1}100%{opacity:1;transform:none;filter:blur(0)}}
-.btn,.hero-btn,.pricing-cta{font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:500;letter-spacing:.02em;color:#fff;background:#000;border:1px solid var(--bl);padding:1.15rem 2.2rem;border-radius:9999px;display:inline-flex;align-items:center;justify-content:center;gap:.9rem;cursor:pointer;text-decoration:none;min-height:48px;transition:all .3s var(--ease);box-shadow:0 4px 25px rgba(0,0,0,.4)}
-.btn:hover,.hero-btn:hover,.pricing-cta:hover{background:#fff;color:#000;border-color:#fff;transform:translateY(-2px)}
-.hero-btn{padding:1.3rem 2.5rem;font-size:1.1rem}
-.dot{width:10px;height:10px;background:var(--neon);border-radius:50%;position:relative;display:inline-block;flex:none;animation:pg 2s infinite ease-in-out}
-.dot::after{content:'';position:absolute;inset:-5px;background:var(--glow);border-radius:50%;animation:we 2s infinite ease-in-out}
-@keyframes pg{0%,100%{opacity:.5;transform:scale(.85);box-shadow:0 0 4px rgba(57,255,20,.3)}50%{opacity:1;transform:scale(1.1);box-shadow:0 0 12px rgba(57,255,20,.9)}}
-@keyframes we{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.3);opacity:0}}
-.hero-tag{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;width:100%;max-width:1200px;margin:0 auto 1.4rem;padding:0 5px;border-bottom:1px solid var(--bl);padding-bottom:1.2rem;font-family:var(--gs);font-size:1.3rem;letter-spacing:-.015em}
-.wordmark{width:100%;overflow:hidden;display:flex;justify-content:center;pointer-events:none}
-.wm{font-family:var(--gs);font-size:clamp(3rem,13.5vw,14.5vw);font-weight:400;letter-spacing:-.03em;line-height:.85;white-space:nowrap;opacity:.95}
-.wm .lw{display:inline-block;overflow:hidden;vertical-align:bottom;line-height:.85}
-.wm .li{display:inline-block;opacity:0;transform:translateX(-105%);filter:blur(20px);animation:lr 1.2s cubic-bezier(.05,.9,.1,1) forwards}
-@keyframes lr{25%{opacity:1}100%{opacity:.95;transform:none;filter:blur(0)}}
-/* sections */
-.sec{position:relative;z-index:2;background:rgba(0,0,0,.9);padding:clamp(70px,10vh,110px) 20px;scroll-margin-top:120px}
-.sec+.sec{border-top:1px solid var(--bs)}
-.inner{width:100%;max-width:1200px;margin:0 auto}
-.ttl{font-family:var(--pf);font-size:clamp(2.2rem,5vw,3rem);font-weight:400;letter-spacing:-.015em;line-height:1.15;text-align:center;margin-bottom:.8rem}
-.sub{font-size:clamp(.98rem,2vw,1.08rem);color:var(--mut);text-align:center;margin:0 auto clamp(2rem,4vh,3rem);max-width:720px;line-height:1.55}
-.grp{margin-bottom:clamp(3rem,6vh,4.5rem)}
-.gt{font-family:var(--gs);font-size:clamp(1.2rem,2.5vw,1.4rem);font-weight:500;letter-spacing:-.015em;margin-bottom:.4rem}
-.gn{font-size:.98rem;color:var(--sub);margin-bottom:1.4rem;line-height:1.5}
-.rule{border:0;height:1px;background:var(--bl);margin:0 0 1.6rem}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem}
-.grid.auto{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
-.plan{position:relative;border:1px solid var(--bl);border-radius:24px;padding:1.8rem;display:flex;flex-direction:column;gap:1rem;min-width:0;background:var(--glass);transition:border-color .3s var(--ease),transform .3s var(--ease)}
-.plan:hover{border-color:rgba(255,255,255,.55);transform:translateY(-3px)}
-.plan.featured{border-color:var(--neon);box-shadow:0 0 30px rgba(57,255,20,.15)}
-.badge{position:absolute;top:-12px;left:1.8rem;background:var(--neon);color:#000;font-size:.8rem;font-weight:600;padding:.25rem .8rem;border-radius:9999px}
-.lvl{font-size:.88rem;color:var(--sub);letter-spacing:.02em}
-.pn{font-family:var(--gs);font-size:1.3rem;font-weight:500;letter-spacing:-.015em}
-.pp{font-family:var(--pf);font-size:1.9rem;line-height:1.15}
-.pp small{font-family:'Outfit',sans-serif;font-size:.95rem;color:var(--sub)}
-.plan ul{list-style:none;display:flex;flex-direction:column;gap:.65rem;padding-top:.6rem;border-top:1px solid var(--bs)}
-.plan li{font-size:.95rem;line-height:1.45;color:rgba(255,255,255,.9);padding-left:1.1rem;position:relative}
-.plan li::before,.notes li::before{content:'';position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--neon)}
-.plan p{color:var(--mut);font-size:.96rem;line-height:1.55}
-.pbg{margin-top:auto;padding-top:1rem;display:flex;flex-direction:column;gap:.5rem}
-.pbtn{font-family:'Outfit',sans-serif;font-size:.92rem;font-weight:500;color:#fff;background:rgba(255,255,255,.07);border:1px solid var(--bl);padding:.75rem 1.25rem;border-radius:9999px;cursor:pointer;text-align:center;text-decoration:none;min-height:44px;display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease)}
-.pbtn:hover{background:#fff;color:#000;border-color:#fff;transform:translateY(-2px)}
-.featured .pbtn.pri,.pbtn.pri.solid{background:var(--neon);color:#000;border-color:var(--neon);font-weight:600}
-.pbtn.sec2{background:transparent;color:var(--mut);font-size:.86rem;border-color:var(--bs)}
-.pbtn.sec2:hover{color:#000}
-.addons{list-style:none;border-top:1px solid var(--bs)}
-.addons li{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:1rem .5rem;border-bottom:1px solid var(--bs);font-size:1rem}
-.ap{display:flex;align-items:center;gap:1rem}
-.ap b{color:var(--neon);font-weight:500;white-space:nowrap}
-.atg{font-family:'Outfit',sans-serif;font-size:.85rem;padding:.45rem 1rem;border-radius:9999px;border:1px solid var(--bl);background:rgba(255,255,255,.05);color:#fff;cursor:pointer;min-height:40px;transition:all .25s}
-.atg:hover,.atg.added{border-color:var(--neon);color:var(--neon)}
-.atg.added{background:rgba(57,255,20,.15)}
-.notes{border:1px solid var(--bl);border-radius:24px;padding:clamp(1.5rem,3vw,2.2rem);background:var(--glass);margin-bottom:clamp(3rem,5vh,4.5rem)}
-.notes ul{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin:1rem 0 1.8rem}
-.notes li{font-size:.98rem;line-height:1.55;color:rgba(255,255,255,.85);padding-left:1.1rem;position:relative}
-.notes li::before{background:rgba(255,255,255,.6)}
-/* planner */
-.builder{border:1px solid var(--bl);border-radius:24px;padding:clamp(1.25rem,3vw,2.5rem);background:rgba(255,255,255,.03);box-shadow:0 10px 40px rgba(0,0,0,.4)}
-.step{margin-bottom:clamp(2rem,4vh,3rem);padding-bottom:clamp(1.8rem,3.5vh,2.5rem);border-bottom:1px solid var(--bs)}
-.step:last-of-type{border-bottom:0;margin-bottom:1.5rem;padding-bottom:0}
-.sh{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap}
-.sn{font-family:var(--gs);font-size:.82rem;font-weight:600;color:var(--neon);background:rgba(57,255,20,.12);border:1px solid rgba(57,255,20,.4);padding:.2rem .6rem;border-radius:9999px;letter-spacing:.05em}
-.st{font-family:var(--gs);font-size:clamp(1.15rem,2.5vw,1.3rem);font-weight:500;letter-spacing:-.015em}
-.sd{font-size:.95rem;color:var(--mut);margin-bottom:1.5rem;line-height:1.45}
-.frow{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
-.fg{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.25rem}
-.fl{font-family:var(--gs);font-size:.92rem;font-weight:500;color:#fff}
-.req{color:var(--neon)}
-.fi{font-family:'Outfit',sans-serif;font-size:1rem;color:#fff;background:rgba(255,255,255,.05);border:1px solid var(--bl);border-radius:14px;padding:.9rem 1.15rem;outline:0;transition:all .25s var(--ease);width:100%}
-.fi::placeholder{color:rgba(255,255,255,.55)}
-.fi:focus{border-color:var(--neon);background:rgba(255,255,255,.08);box-shadow:0 0 20px rgba(57,255,20,.2)}
-.fi.err{border-color:#ff6b78;box-shadow:0 0 15px rgba(255,71,87,.3)}
-.em{color:#ff8a94;font-size:.85rem;display:none}.em.v{display:block}
-.chips{display:flex;flex-wrap:wrap;gap:.75rem}
-.chip{cursor:pointer;position:relative}
-.chip input{position:absolute;opacity:0;pointer-events:none}
-.chip span{display:inline-flex;align-items:center;gap:.6rem;padding:.75rem 1.35rem;border-radius:9999px;border:1px solid var(--bl);background:rgba(255,255,255,.04);color:rgba(255,255,255,.92);font-size:.95rem;min-height:44px;user-select:none;transition:all .25s var(--ease)}
-.chip:hover span{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.08)}
-.chip input:checked+span{border-color:var(--neon);background:rgba(57,255,20,.12);color:#fff;font-weight:500;box-shadow:0 0 16px rgba(57,255,20,.2)}
-.chip input:checked+span::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon)}
-.chip input:focus-visible+span{outline:2px solid var(--neon);outline-offset:2px}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem}
-.fc{border:1px solid var(--bl);border-radius:16px;padding:1.1rem;background:rgba(255,255,255,.03);cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;min-height:90px;transition:all .25s var(--ease)}
-.fc:hover{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.06)}
-.fc.on{border-color:var(--neon);background:rgba(57,255,20,.08);box-shadow:0 0 20px rgba(57,255,20,.15)}
-.fh{display:flex;justify-content:space-between;gap:.5rem;margin-bottom:.4rem}
-.fnm{font-family:var(--gs);font-size:1rem;font-weight:500}
-.cb{width:20px;height:20px;border-radius:5px;border:1px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;flex:none}
-.fc.on .cb{background:var(--neon);border-color:var(--neon)}
-.fc.on .cb::after{content:'✓';color:#000;font-size:.8rem;font-weight:800}
-.fd{font-size:.88rem;color:var(--mut);line-height:1.4}
-.infra{display:inline-block;margin-top:.6rem;font-size:.75rem;color:var(--neon);background:rgba(57,255,20,.12);border:1px solid rgba(57,255,20,.35);padding:.18rem .55rem;border-radius:9999px;align-self:flex-start}
-.sum{border:1px solid rgba(57,255,20,.5);border-radius:24px;padding:clamp(1.25rem,3vw,2.2rem);background:rgba(57,255,20,.03);box-shadow:0 0 35px rgba(57,255,20,.08);margin-top:2rem;display:flex;flex-direction:column;gap:1.5rem}
-.sumh{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;border-bottom:1px solid var(--bs);padding-bottom:1.2rem}
-.sumt{font-family:var(--gs);font-size:clamp(1.2rem,2.5vw,1.4rem);font-weight:500;display:flex;align-items:center;gap:.6rem}
-.tact{background:none;border:0;color:var(--mut);font-family:'Outfit',sans-serif;font-size:.92rem;cursor:pointer;padding:.4rem .6rem;text-decoration:underline;text-underline-offset:3px;min-height:44px}
-.tact:hover{color:var(--neon)}
-.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
-.si{background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:14px;padding:1rem}
-.sl{font-family:var(--gs);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);margin-bottom:.35rem}
-.sv{font-size:1rem;font-weight:500;line-height:1.4;word-break:break-word}
-.sv.ac{color:var(--neon)}
-.est{border-top:1px solid var(--bs);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
-.est h4{font-family:var(--gs);font-size:1.15rem;font-weight:500}
-.est p{font-size:.9rem;color:var(--sub);max-width:520px;margin-top:.35rem;line-height:1.5}
-.price{font-family:var(--pf);font-size:clamp(1.8rem,4vw,2.4rem);color:var(--neon);text-shadow:0 0 15px rgba(57,255,20,.3);text-align:right;white-space:nowrap}
-.price small{display:block;font-family:'Outfit',sans-serif;font-size:.85rem;color:var(--mut);text-shadow:none}
-.scta{display:flex;justify-content:flex-end;align-items:center;gap:1rem;flex-wrap:wrap}
-/* portfolio */
-.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.8rem}
-.pcard{border:1px solid var(--bl);border-radius:24px;padding:clamp(1.2rem,2.5vw,1.8rem);background:var(--glass);display:flex;flex-direction:column;gap:1.2rem;transition:border-color .3s,transform .3s}
-.pcard:hover{border-color:rgba(255,255,255,.55);transform:translateY(-3px)}
-.mock{border-radius:16px;overflow:hidden;border:1px solid var(--bs);background:#0d0d0d;height:240px;display:flex;flex-direction:column}
-.mtop{background:rgba(255,255,255,.06);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bs)}
-.mdots{display:flex;gap:6px}.mdots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35)}
-.mtog{display:flex;background:rgba(255,255,255,.08);border-radius:9999px;padding:2px}
-.vb{font-family:var(--gs);font-size:.76rem;color:var(--mut);background:none;border:0;padding:5px 10px;border-radius:9999px;cursor:pointer;min-height:28px}
-.vb.active{color:#000;background:var(--neon);font-weight:600}
-.canvas{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 50%,rgba(30,45,35,.3) 0%,#060606 80%);text-align:center;transition:all .3s}
-.canvas.mob{max-width:210px;margin:0 auto;border:2px solid rgba(255,255,255,.3);border-radius:24px}
-.cin{display:flex;flex-direction:column;align-items:center;gap:.6rem}
-.cs{font-size:.8rem;color:var(--neon);letter-spacing:.05em;text-transform:uppercase}
-.ct{font-family:var(--pf);font-size:1.2rem}
-.cd{font-size:.85rem;color:var(--mut)}
-.ptag{font-family:var(--gs);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--neon)}
-.pcard h3{font-family:var(--gs);font-size:1.3rem;font-weight:500;letter-spacing:-.01em;margin:.4rem 0 .6rem}
-.pcard p{font-size:.96rem;color:var(--mut);line-height:1.5}
-.tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.8rem}
-.tags span{font-size:.78rem;color:rgba(255,255,255,.88);background:rgba(255,255,255,.06);border:1px solid var(--bs);padding:.2rem .6rem;border-radius:9999px}
-/* faq */
-.faq{display:flex;flex-direction:column;gap:1rem;max-width:900px;margin:0 auto}
-.fq{border:1px solid var(--bl);border-radius:18px;background:var(--glass);overflow:hidden;transition:border-color .3s}
-.fq.active{border-color:rgba(57,255,20,.55);background:rgba(57,255,20,.03)}
-.fq button{width:100%;text-align:left;background:none;border:0;padding:1.3rem 1.5rem;color:#fff;font-family:var(--gs);font-size:clamp(1rem,2vw,1.15rem);font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:1rem;cursor:pointer;min-height:52px}
-.fq i{font-style:normal;font-size:1.4rem;color:var(--neon);transition:transform .3s var(--ease);flex:none}
-.fq.active i{transform:rotate(45deg)}
-.fa{max-height:0;overflow:hidden;transition:max-height .4s var(--ease);padding:0 1.5rem;font-size:1rem;line-height:1.6;color:rgba(255,255,255,.88)}
-.fq.active .fa{padding-bottom:1.3rem}
-/* footer / contact */
-.foot{position:relative;z-index:2;background:#000;border-top:1px solid var(--bl);padding:3rem 20px calc(2rem + env(safe-area-inset-bottom,0px));scroll-margin-top:120px}
-.fb{display:flex;justify-content:space-between;align-items:center;gap:1.2rem 2rem;flex-wrap:wrap;max-width:1200px;margin:0 auto}
-.soc{display:flex;gap:1.25rem;align-items:center}
-.soc a{color:var(--mut);display:inline-flex;min-width:44px;min-height:44px;align-items:center;justify-content:center;transition:all .3s var(--ease)}
-.soc a:hover{color:#fff;transform:translateY(-2px)}
-.fl2{display:flex;gap:1.6rem;flex-wrap:wrap;justify-content:center}
-.fl2 a{font-size:.98rem;text-decoration:none;letter-spacing:.03em;transition:color .3s}
-.fl2 a:hover{color:var(--neon)}
-.copy{font-size:.95rem;color:var(--sub)}
-/* email modal */
-.mo{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s}
-.mo.open{opacity:1;visibility:visible}
-.mc{background:#090909;border:1px solid rgba(57,255,20,.45);box-shadow:0 10px 50px rgba(0,0,0,.8),0 0 30px rgba(57,255,20,.15);border-radius:24px;max-width:680px;width:100%;padding:clamp(1.5rem,3vw,2.2rem);display:flex;flex-direction:column;gap:1.2rem;position:relative;max-height:90vh;overflow-y:auto}
-.mc h3{font-family:var(--pf);font-size:clamp(1.6rem,3.5vw,2rem);font-weight:400;line-height:1.2;padding-right:40px}
-.mc p{font-size:.98rem;color:var(--mut);line-height:1.55}.mc p strong{color:var(--neon)}
-.mx{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:1px solid var(--bl);background:#000;color:#fff;font-size:1.4rem;cursor:pointer}
-.mx:hover{background:#fff;color:#000}
-.draft{background:rgba(255,255,255,.05);border:1px solid var(--bl);border-radius:14px;padding:1rem 1.2rem;font-family:monospace;font-size:.86rem;color:rgba(255,255,255,.92);white-space:pre-wrap;max-height:220px;overflow-y:auto;line-height:1.45}
-.mb{display:flex;gap:.85rem;flex-wrap:wrap}
-.pa,.sa{font-family:'Outfit',sans-serif;font-size:.96rem;font-weight:500;padding:.85rem 1.6rem;border-radius:9999px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;min-height:44px;transition:all .25s}
-.pa{color:#000;background:var(--neon);border:1px solid var(--neon)}.pa:hover{background:#fff;border-color:#fff}
-.sa{color:#fff;background:rgba(255,255,255,.1);border:1px solid var(--bl)}.sa:hover{background:rgba(255,255,255,.2)}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--neon);color:#000;font-weight:600;padding:.8rem 1.4rem;border-radius:9999px;z-index:100001;opacity:0;pointer-events:none;transition:all .35s var(--ease)}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-/* cursor */
-.gcard,.ring{position:fixed;top:0;left:0;z-index:99999;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(0);will-change:transform}
-.gcard{padding:.75rem 1.5rem;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--bs);border-radius:9999px;font-family:var(--gs);font-size:.85rem;font-weight:500;letter-spacing:.06em;color:var(--neon);text-transform:uppercase;white-space:nowrap;text-shadow:0 0 8px rgba(57,255,20,.45);transition:opacity .4s}
-.gcard b{color:#fff;font-weight:500}
-.ring{width:48px;height:48px;border:1.5px solid rgba(255,255,255,.5);border-radius:50%;z-index:99998;transition:opacity .4s}
-.gcard.active,.ring.active{opacity:1}
-@media(pointer:coarse),(hover:none){.gcard,.ring{display:none!important}}
-.rv{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}.rv.in{opacity:1;transform:none}
-@media(max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pgrid{grid-template-columns:1fr}.frow{grid-template-columns:1fr}}
-@media(max-width:768px){.grid{grid-template-columns:1fr}.sg{grid-template-columns:1fr}.est{flex-direction:column;align-items:flex-start}.price{text-align:left}.hero-tag{font-size:1.1rem}.fb{flex-direction:column;align-items:flex-start}.fl2{justify-content:flex-start}}
-@media(max-width:480px){.hero-btn,.pricing-cta{width:100%}.chip span{width:100%;justify-content:center}.chip{flex:1 1 100%}.fgrid{grid-template-columns:1fr}.sec{padding-left:14px;padding-right:14px}}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none}}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scroll-driven Frame Animation</title>
+  <style>
+    :root {
+      --animation-height: 400vh;
+      --background: #0b0d12;
+      --foreground: #f5f7fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: system-ui, sans-serif;
+    }
+
+    .intro,
+    .outro {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 3rem;
+      text-align: center;
+    }
+
+    .scroll-animation {
+      position: relative;
+      height: var(--animation-height);
+    }
+
+    .animation-stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: var(--background);
+    }
+
+    #animation-canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+    }
+
+    .loading {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: var(--background);
+      z-index: 2;
+      transition: opacity 300ms ease;
+    }
+
+    .loading.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .progress {
+      width: min(320px, 70vw);
+      height: 4px;
+      margin-top: 1rem;
+      border-radius: 99px;
+      background: #2b3040;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #fff;
+      transition: width 100ms linear;
+    }
+  </style>
 </head>
-<body id="top">
-<div id="top-gradient" aria-hidden="true"></div>
-
-<header class="site-header">
-  <a class="brand" href="#top">DigiFront Door</a>
-  <nav class="pill-nav" id="pill-nav" aria-label="Primary">
-    <a href="#about">About</a><a href="#features">Capabilities</a><a href="#portfolio">Portfolio</a><a href="#pricing">Pricing &amp; Planner</a><a href="#faq">FAQ</a><a href="#contact" class="cta">Contact</a>
-  </nav>
-</header>
-
-<main>
-<section class="hero">
-  <div>
-    <h1 class="hero-title">Apply Now to be part <br> of the closed beta</h1>
-    <a class="hero-btn" href="#planner"><span>Book a demo</span><span class="dot"></span></a>
-  </div>
-  <div style="width:100%">
-    <div class="hero-tag"><span>Stay in Touch</span><span>Think. Build. Repeat.</span></div>
-    <div class="wordmark"><h2 class="wm" id="wm">DigiFront Door</h2></div>
-  </div>
-</section>
-
-<section class="sec" id="about"><div class="inner">
-  <h2 class="ttl rv">About DigiFront Door</h2>
-  <p class="sub rv">"Think. Build. Repeat." — Crafting digital front doors that turn visitors into devoted clients through bespoke interaction and uncompromising engineering.</p>
-  <div class="grp"><h3 class="gt rv">The Philosophy</h3><p class="gn rv">In an era of generic website builders, your digital front door is the first and most defining touchpoint of your brand.</p><hr class="rule"><div class="grid auto" id="about-grid"></div></div>
-  <div class="notes rv"><h3 class="gt">Ready to build your front door?</h3><p style="margin:.8rem 0 1.5rem;color:var(--mut);line-height:1.55">Whether you need an expressive single-page landing or a full cinematic brand experience, we are ready to bring your vision to life.</p>
-    <div style="display:flex;gap:1rem;flex-wrap:wrap"><a href="#pricing" class="pricing-cta"><span>Explore Pricing &amp; Custom Planner</span><span class="dot"></span></a><a href="mailto:digifrontdoor7@gmail.com" class="pbtn" style="padding:1.15rem 2.2rem;font-size:1rem">Contact via Email</a></div></div>
-</div></section>
-
-<section class="sec" id="features"><div class="inner">
-  <h2 class="ttl rv">Capabilities &amp; Features</h2>
-  <p class="sub rv">Where high-performance engineering meets visual distinction. Built from the ground up for modern businesses.</p>
-  <div class="grp"><h3 class="gt rv">Core Disciplines</h3><p class="gn rv">Our full-spectrum capability suite covers design, motion, engineering, and continuous care.</p><hr class="rule"><div class="grid auto" id="feat-grid"></div></div>
-  <div class="notes rv"><h3 class="gt">Experience the difference</h3><p style="margin:.8rem 0 1.5rem;color:var(--mut);line-height:1.55">Check out our transparent packages or create your personalized specification with our custom builder.</p><a href="#pricing" class="pricing-cta"><span>View Packages &amp; Custom Builder</span><span class="dot"></span></a></div>
-</div></section>
-
-<section class="sec" id="portfolio"><div class="inner">
-  <h2 class="ttl rv">Concept Portfolio Showcase</h2>
-  <p class="sub rv">Explore live demonstrations of our motion design, interaction architecture, and high-performance engineering concepts.</p>
-  <div class="pgrid" id="pf-grid"></div>
-</div></section>
-
-<section class="sec" id="pricing"><div class="inner">
-  <h2 class="ttl rv">Pricing &amp; Custom Packages</h2>
-  <p class="sub rv">Transparent website packages priced by animation complexity, optional monthly maintenance plans, or build your completely custom project scope below. All prices in USD.</p>
-  <div class="grp rv"><h3 class="gt">Website Development Packages</h3><p class="gn">Choose the level of animation and interaction your project needs. Click "Customize Plan" to load any tier into the custom planner below.</p><hr class="rule"><div class="grid" id="dev-grid"></div></div>
-  <div class="grp rv"><h3 class="gt">Website Maintenance Plans</h3><p class="gn">Monthly coverage depends on agreed service scope. Billed separately from one-time development packages.</p><hr class="rule"><div class="grid" id="care-grid"></div></div>
-  <div class="grp rv"><h3 class="gt">Optional Add-ons</h3><p class="gn">Click "+ Add to Quote" to seamlessly incorporate extra features into your project calculation.</p><hr class="rule"><ul class="addons" id="addon-list"></ul></div>
-  <div class="notes rv"><h3 class="gt">Important Pricing Notes</h3><ul>
-    <li>Final quotes depend on project complexity, functionality, page count, and technical specifications.</li>
-    <li>Domain registration, hosting, premium plugins, paid APIs, and third-party subscriptions are billed separately unless explicitly included.</li>
-    <li>Major redesigns, additional features, and work outside the agreed maintenance scope require separate quotes.</li>
-    <li>Reach out directly to <strong>digifrontdoor7@gmail.com</strong> for custom enterprise scopes.</li></ul>
-    <a href="#planner" class="pricing-cta"><span>Configure Custom Website</span><span class="dot"></span></a></div>
-
-  <div class="grp" id="planner" style="scroll-margin-top:120px"><h3 class="gt">Custom Website Order Planner &amp; Price Estimator</h3><p class="gn">Select your exact project requirements. The dynamic price estimator will update instantly. Submit to prepare a brief you can send by email or copy.</p><hr class="rule">
-  <div class="builder"><form id="proj-form" novalidate>
-    <div class="step" id="step-contact"><div class="sh"><span class="sn">STEP 1</span><h4 class="st">Customer Information</h4></div><p class="sd">We will address your proposal and project brief to these contact details.</p>
-      <div class="frow"><div class="fg"><label class="fl" for="client-name">Your Full Name <span class="req">*</span></label><input type="text" id="client-name" class="fi" placeholder="e.g. Alex Morgan" required autocomplete="name"><span class="em" id="name-error">Please provide your name.</span></div>
-      <div class="fg"><label class="fl" for="client-email">Email Address <span class="req">*</span></label><input type="email" id="client-email" class="fi" placeholder="e.g. alex@company.com" required autocomplete="email"><span class="em" id="email-error">Please enter a valid email address.</span></div></div>
-      <div class="frow"><div class="fg"><label class="fl" for="brand-name">Business / Brand Name</label><input type="text" id="brand-name" class="fi" placeholder="e.g. Studio Vertex"></div>
-      <div class="fg"><label class="fl" for="reference-url">Preferred Style / Reference Website URL</label><input type="text" id="reference-url" class="fi" placeholder="https://example.com or awwwards inspiration"></div></div></div>
-    <div class="step"><div class="sh"><span class="sn">STEP 2</span><h4 class="st">Website Type</h4></div><p class="sd">Select the primary purpose of your website project.</p><div class="chips" id="c-type"></div></div>
-    <div class="step"><div class="sh"><span class="sn">STEP 3</span><h4 class="st">Number of Pages</h4></div><p class="sd">Choose your desired page volume or select custom.</p><div class="chips" id="c-pages"></div></div>
-    <div class="step"><div class="sh"><span class="sn">STEP 4</span><h4 class="st">Animation Level</h4></div><p class="sd">Select the visual motion tier appropriate for your brand.</p><div class="chips" id="c-anim"></div></div>
-    <div class="step"><div class="sh"><span class="sn">STEP 5</span><h4 class="st">Required Features (Select All That Apply)</h4></div><p class="sd">Select all functional capabilities your project requires.</p><div class="fgrid" id="feat-cards"></div></div>
-    <div class="step"><div class="sh"><span class="sn">STEP 6</span><h4 class="st">Budget Range &amp; Desired Timeline</h4></div><p class="sd">Guide our proposal alignment (preferences, not a binding contract).</p>
-      <div class="fg"><span class="fl">Budget Preference (USD)</span><div class="chips" id="c-budget"></div></div>
-      <div class="fg" style="margin-top:1.5rem"><span class="fl">Desired Delivery Timeline</span><div class="chips" id="c-time"></div></div></div>
-    <div class="step"><div class="sh"><span class="sn">STEP 7</span><h4 class="st">Additional Project Requirements</h4></div><p class="sd">Share any special features, APIs, CRM tools, or unique ideas.</p>
-      <div class="fg"><label class="fl" for="additional-requirements" style="position:absolute;left:-9999px">Additional requirements</label><textarea id="additional-requirements" class="fi" rows="3" placeholder="Describe any unique workflows, brand assets, or specific goals..."></textarea></div></div>
-
-    <div class="sum" aria-live="polite">
-      <div class="sumh"><div class="sumt"><span>Estimated Project Specification</span><span class="dot"></span></div><div><button type="button" class="tact" id="btn-edit">Edit Choices</button><button type="button" class="tact" id="btn-reset">Reset Form</button></div></div>
-      <div class="sg">
-        <div class="si"><div class="sl">Client &amp; Type</div><div class="sv" id="s-client"></div></div>
-        <div class="si"><div class="sl">Scope &amp; Pages</div><div class="sv" id="s-scope"></div></div>
-        <div class="si"><div class="sl">Animation Tier</div><div class="sv ac" id="s-anim"></div></div>
-        <div class="si"><div class="sl">Budget &amp; Target Timeline</div><div class="sv" id="s-budget"></div></div>
-        <div class="si" style="grid-column:1/-1"><div class="sl">Selected Features</div><div class="sv" id="s-feat"></div></div></div>
-      <div class="est"><div><h4>Indicative Development Cost: <span id="s-days" style="color:var(--neon);font-size:.95rem;font-weight:400;margin-left:.5rem"></span></h4>
-        <p>Configurable estimate based on standard options. Final quote confirmed after reviewing project brief. Third-party domains, hosting, and paid APIs billed separately.</p>
-        <p style="color:rgba(255,255,255,.9)"><strong>Optional Ongoing Maintenance:</strong> From $15–$79/month (shown separately, optional).</p></div>
-        <div class="price" id="s-price"></div></div>
-      <div class="scta"><button type="button" class="btn" id="btn-copy-brief"><span>Copy Brief</span></button><button type="submit" class="pricing-cta" id="btn-submit"><span>Request Custom Quote</span><span class="dot"></span></button></div>
+<body>
+  <section class="intro">
+    <div>
+      <h1>Scroll to play</h1>
+      <p>The animation begins below.</p>
     </div>
-  </form></div></div>
-</div></section>
+  </section>
 
-<section class="sec" id="faq"><div class="inner">
-  <h2 class="ttl rv">Frequently Asked Questions</h2>
-  <p class="sub rv">Clear answers regarding our website development process, pricing, maintenance, and animations.</p>
-  <div class="faq" id="faq-list"></div>
-</div></section>
-</main>
-
-<footer class="foot" id="contact">
-  <div class="fb">
-    <div class="soc">
-      <a href="mailto:digifrontdoor7@gmail.com?subject=LinkedIn%20Connect%20Inquiry" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-      <a href="mailto:digifrontdoor7@gmail.com?subject=X%20Twitter%20Connect%20Inquiry" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg></a>
-      <a href="mailto:digifrontdoor7@gmail.com?subject=Instagram%20Connect%20Inquiry" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+  <section class="scroll-animation" id="scroll-animation">
+    <div class="animation-stage">
+      <canvas id="animation-canvas" aria-label="Scroll-controlled animation"></canvas>
+      <div class="loading" id="loading" aria-live="polite">
+        <div>
+          <div>Loading animation… <span id="loading-text">0%</span></div>
+          <div class="progress" aria-hidden="true">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <nav class="fl2" aria-label="Footer"><a href="#about">About</a><a href="#features">Features</a><a href="#portfolio">Portfolio</a><a href="#pricing">Pricing &amp; Planner</a><a href="#faq">FAQ</a><a href="#" id="contact-link">Email Us</a></nav>
-    <div class="copy">© 2026 DigiFront Door</div>
-  </div>
-</footer>
+  </section>
 
-<div class="video-container" aria-hidden="true">
-  <video autoplay muted loop playsinline webkit-playsinline x5-playsinline preload="auto" id="bg-video"><source src="flower.mp4" type="video/mp4"></video>
-</div>
+  <section class="outro">
+    <p>End of animation</p>
+  </section>
 
-<div class="mo" id="mail-modal" role="dialog" aria-modal="true" aria-label="Email draft prepared" aria-hidden="true">
-  <div class="mc">
-    <button class="mx" id="mail-close" aria-label="Close">&times;</button>
-    <h3>Your Project Brief is Ready</h3>
-    <p>Your brief is <strong>copied to your clipboard</strong>. Send it to <strong>digifrontdoor7@gmail.com</strong> with whichever option works for you, then click <strong>Send</strong> in your email client.</p>
-    <div class="draft" id="draft" tabindex="0"></div>
-    <div class="mb">
-      <button type="button" class="pa" id="m-copy"><span id="m-copy-l">Copy Project Details</span></button>
-      <a href="#" class="sa" id="m-mailto">Default Email App (mailto)</a>
-      <a href="#" class="sa" id="m-gmail" target="_blank" rel="noopener noreferrer">Open in Gmail</a>
-    </div>
-  </div>
-</div>
-<div class="toast" id="toast" role="status"></div>
-<div class="ring" id="ring"></div><div class="gcard" id="gcard"><span><b>Say</b> Hello!</span></div>
+  <script>
+    const FRAME_COUNT = 240;
+    // Upload the extracted WebP files to this folder on your website.
+    const FRAME_PATH = "/assets/animation_frames/frame_";
 
-<script>
-const MAIL='digifrontdoor7@gmail.com';
-const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+    const canvas = document.getElementById("animation-canvas");
+    const context = canvas.getContext("2d");
+    const animationSection = document.getElementById("scroll-animation");
+    const loading = document.getElementById("loading");
+    const loadingText = document.getElementById("loading-text");
+    const progressBar = document.getElementById("progress-bar");
 
-/* video */
-(()=>{const v=$('#bg-video');if(!v)return;v.muted=true;v.defaultMuted=true;v.playsInline=true;
-const go=()=>{const p=v.play();p&&p.catch&&p.catch(()=>{})};go();v.addEventListener('canplay',go,{once:true});
-['click','touchstart','pointerdown'].forEach(e=>addEventListener(e,go,{once:true,passive:true}))})();
+    const frames = [];
+    let currentFrame = 0;
+    let animationRequest = null;
 
-/* data */
-const ABOUT=[['Bespoke Engineering','Every website is hand-crafted with clean, semantic markup, zero unnecessary bulk, and tailored micro-interactions designed to highlight your value proposition.'],['Kinetic Fluidity','Physics-based cursor effects, smooth LERP easing, scroll-triggered reveals, and WebGL elements that feel alive without slowing down load times.'],['Transparent Partnership','No unexpected hidden costs. Clear animation tier pricing, transparent maintenance plans, and direct communication addressed to digifrontdoor7@gmail.com.']];
-const FEATS=[['Fluid Motion Architecture','Subtle hover physics, scroll-linked storytelling, reveal masks with blur transitions, and responsive mobile adaptations.'],['High-Converting Funnels','Strategic information architecture, interactive inquiry builders, direct WhatsApp/booking triggers, and clean lead capture.'],['Modern Tech Stack','Lightweight JavaScript, hardware-accelerated CSS3 transforms, pristine SVG assets, and ultra-fast static hosting compatibility.'],['SEO & Technical Health','Semantic markup, Open Graph social cards, structured data, optimized media delivery, and sub-second initial load speeds.'],['Third-Party Ecosystem','Clear guidance and integration for payment gateways, calendar booking, WhatsApp APIs, AI chatbots, and newsletter platforms.'],['Reliable Maintenance','Ongoing uptime monitoring, security audits, routine content updates, and animation compatibility testing across browser releases.']];
-const PORT=[
-['Interactive Concept','Kinetic Agency Front Door','LERP Physics & Typography Reveal','Kinetic Agency Front Door','High-impact brand entrance featuring LERP cursor tracking, word-mask typography reveals, and hardware-accelerated ambient video canvas.',['HTML5 / CSS3','LERP Physics','Hardware GPU','Fluid Motion']],
-['Architectural Concept','Minimalist Studio Portfolio','Editorial Layouts & Viewport Reveals','Minimalist Architecture Portfolio','Monochromatic editorial layout designed for architects and design studios, emphasizing typography hierarchy, smooth viewport reveals, and fluid media grids.',['Semantic HTML5','CSS Grid','IntersectionObserver','Sub-Second Load']],
-['Ecommerce Concept','Direct-to-Consumer Storefront','WhatsApp Checkout Funnel','Boutique Luxury Storefront','High-conversion product showcase with sticky quick-action drawers, variant chips, and direct WhatsApp order routing without complex backend bloat.',['WhatsApp API','Client-Side Cart','Responsive Mobile','Zero Bloat']],
-['SaaS Concept','Interactive Pricing Matrix','Dynamic State & Pre-filled Email Routing','SaaS Showcase & Pricing Architecture','Conversion-oriented landing with interactive live price estimators, customizable feature checklists, and one-click email brief formulation.',['Vanilla JS State','Mailto + Gmail Builder','Accessible Modals','Clipboard API']]];
-const FAQS=[['How does the website development process work?','We follow a focused, four-step approach: 1) Brief & Alignment, 2) Concept & Wireframing, 3) Bespoke Engineering, and 4) Testing & Launch on your domain or GitHub Pages with zero server hassle.'],['How much does a custom website cost?','Our packages start at $69 for single landing pages, $129 for standard business websites, $249 for interactive motion sites, up to $349–$449+ for ecommerce and cinematic animations. You can also configure custom quotes in our interactive planner.'],['Can I choose my own design and visual style?','Yes. Every website is built custom to your brand guidelines. You can specify whether you prefer dark & cinematic, minimal & clean, luxury, corporate, or experimental styles.'],['Can you add custom animations and interactive effects?','Absolutely. We specialize in fluid kinetic interactions, including LERP cursor physics, scroll-triggered text reveals, custom SVG animations, WebGL 3D effects, and smooth page transitions tuned for 60–120 FPS performance.'],['How long does a website take to complete?','A typical 1-page landing takes 3–5 business days. Standard business websites (3–5 pages) take 5–7 days. Expanded websites with advanced animations typically take 1–3 weeks.'],['Do you provide ongoing website maintenance?','Yes, we offer dedicated monthly care plans starting at $15/month (Basic Care) up to $149+/month (Elite Care). Maintenance is billed separately from one-time development fees.'],['Are hosting and domain charges included?','Domain registration and third-party hosting fees are paid directly by the client to ensure 100% ownership of your digital assets. We provide full DNS setup assistance. Free high-speed hosting on GitHub Pages or Cloudflare Pages is also available.'],['How can I request a custom quote?','You can use our Custom Website Project Builder in the Pricing section or click "Customize Plan" on any package. It generates a pre-filled brief ready to send directly to digifrontdoor7@gmail.com.']];
-const DEV=[
-{level:'Basic animation',name:'Starter Website',price:'$69',page:'1 page (Single-page)',type:'Landing page',anim:'Basic',items:['1–3 pages (Clean, responsive layout)','Smooth hover states & subtle transitions','Essential contact inquiry form & social links','Mobile & tablet optimization','Fast page load performance','2 revision rounds included']},
-{level:'Business Standard',name:'Basic Business Website',price:'$129',page:'2–5 pages',type:'Business website',anim:'Basic',items:['3–5 custom responsive pages','Direct WhatsApp click-to-chat integration','Validated contact inquiry form','Clean entrance animations & section fades','Basic on-page SEO meta setup','2 revision rounds included']},
-{level:'Interactive Motion',name:'Professional Website',price:'$249',featured:1,page:'2–5 pages',type:'Business website',anim:'Advanced',items:['5–8 bespoke responsive pages','Scroll-triggered reveal animations & counters','Interactive cards, tabs, and galleries','Custom brand typography & aesthetic','Complete mobile & speed optimization','Basic SEO readiness · 3 revision rounds']},
-{level:'Cinematic Motion',name:'Premium Animated Website',price:'$449',page:'6–10 pages',type:'Agency website',anim:'Advanced',items:['6–10 high-impact custom pages','Advanced kinetic typography & fluid parallax','Bespoke interactive UI menus & transitions','High-performance asset tuning (90+ mobile score)','4 revision rounds included']},
-{level:'Online Store & Catalog',name:'Ecommerce Website',price:'Starting at $349',page:'2–5 pages',type:'Ecommerce website',anim:'Advanced',items:['Product catalog setup & item detail pages','Shopping cart & WhatsApp / online checkout','Payment gateway integration (Stripe, PayPal)','Mobile-first responsive checkout experience','3 revision rounds included']}];
-const CARE=[
-{name:'Basic Care',price:'$15',items:['Website uptime monitoring','Cloud backups where supported','Basic security & health checks','Minor text/link fixes','Affordable monthly maintenance']},
-{name:'Standard Care',price:'$39',items:['Everything in Basic Care','Content & image updates (up to 2 hrs/mo)','Broken-link & mobile compatibility checks','Monthly performance review','Priority email response']},
-{name:'Priority Care',price:'$79',items:['Everything in Standard Care','Animation & interactive feature checkups','Emergency bug fixes & uptime priority','Quarterly SEO audit & speed tune-up','Direct developer contact']},
-{name:'Elite Care',price:'$149+',items:['Advanced troubleshooting & dedicated hours','Custom technical support & integrations','Complex animation & WebGL diagnostics','24/7 priority emergency response','Continuous speed & conversion optimization']}];
-const ADDONS=[['Additional standard page','$20–$40',20],['Additional animated page','$40–$75',40],['Advanced hero animation','$50–$120',50],['Custom 3D section','$150–$350+',150],['Booking system integration','$60–$150',60],['WhatsApp / Social automation setup','$40–$120',40],['E-commerce functionality','$150–$450+',150]];
-const FEATCAT=[
-['Contact form','Validated inquiry form with email routing.',1,0,0],['WhatsApp integration','Direct click-to-chat WhatsApp button.',0,15],['Chatbot','Automated live assistant answering FAQs.',0,60,'Requires AI/chat API'],['Appointment booking','Calendar scheduling & reservation slots.',0,45,'Requires booking service'],['Ecommerce functionality','Shopping cart & catalog management.',0,120,'Requires ecommerce setup'],['Payment integration','Stripe, PayPal, or localized checkout.',0,60,'Requires merchant account'],['Image gallery','Interactive lightbox & responsive media grid.',0,25],['Blog','Article publishing layout & content structure.',0,35],['Newsletter signup','Email subscriber capture & API connection.',0,20,'Requires newsletter account'],['Social media integration','Social profile links and preview cards.',0,10],['SEO setup','Meta tags, Open Graph, and search indexing.',1,25],['Website speed optimization','Asset minification, caching, and 90+ score.',1,30],['Custom interactive features','Bespoke calculators, filters, or animations.',0,60]
-].map(f=>({name:f[0],desc:f[1],on:!!f[2],cost:f[3],note:f[4]}));
-const BASE={'Landing page':69,'Business website':129,'Portfolio website':129,'Restaurant website':129,'Agency website':249,'Ecommerce website':349,'Other':129};
-const ANIM={Basic:0,Advanced:75,Cinematic:180};
-const OPT={
-type:['Business website','Portfolio website','Landing page','Ecommerce website','Restaurant website','Agency website','Other'].map(v=>[v,v]),
-pages:[['1 page (Single-page)','1 page (Single-page)'],['2–5 pages','2–5 pages (Standard)'],['6–10 pages','6–10 pages (Expanded)'],['10+ pages (Enterprise)','10+ pages (Enterprise)']],
-anim:[['Basic','Basic (Hovers & subtle transitions)'],['Advanced','Advanced (Scroll reveals, parallax, LERP)'],['Cinematic','Cinematic (3D, WebGL, immersive transitions)']],
-budget:['Under $200','$200–$500','$500–$1,000','$1,000–$2,500','$2,500+','Custom quote required'].map(v=>[v,v]),
-time:['As soon as possible','Within 1–2 weeks','Within 2–4 weeks','Flexible'].map(v=>[v,v])};
-const DEF={type:'Business website',pages:'2–5 pages',anim:'Advanced',budget:'$500–$1,000',time:'Within 2–4 weeks'};
-const NAMES={type:'website-type',pages:'page-count',anim:'animation-level',budget:'budget-range',time:'delivery-timeline'};
-const addons=new Set();
+    function frameUrl(index) {
+      // The exported files are frame_0001.webp through frame_0240.webp.
+      return `${FRAME_PATH}${String(index + 1).padStart(4, "0")}.webp`;
+    }
 
-/* render */
-const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-function render(){
-$('#about-grid').innerHTML=ABOUT.map(a=>`<article class="plan rv"><h4 class="pn">${esc(a[0])}</h4><p>${esc(a[1])}</p></article>`).join('');
-$('#feat-grid').innerHTML=FEATS.map(a=>`<article class="plan rv"><h4 class="pn">${esc(a[0])}</h4><p>${esc(a[1])}</p></article>`).join('');
-$('#pf-grid').innerHTML=PORT.map((p,i)=>`<article class="pcard rv"><div class="mock"><div class="mtop"><div class="mdots"><i></i><i></i><i></i></div><div class="mtog"><button type="button" class="vb active" data-c="${i}" data-v="d">Desktop</button><button type="button" class="vb" data-c="${i}" data-v="m">Mobile</button></div></div><div class="canvas" id="cv${i}"><div class="cin"><span class="cs">${p[0]}</span><h4 class="ct">${esc(p[1])}</h4><span class="cd">${esc(p[2])}</span></div></div></div><div><span class="ptag">Design &amp; Motion Concept</span><h3>${esc(p[3])}</h3><p>${esc(p[4])}</p><div class="tags">${p[5].map(t=>`<span>${t}</span>`).join('')}</div></div><button type="button" class="pbtn pri solid" data-style="${esc(p[3])}">Inquire About This Style</button></article>`).join('');
-$('#dev-grid').innerHTML=DEV.map(p=>`<article class="plan ${p.featured?'featured':''} rv">${p.featured?'<span class="badge">Recommended</span>':''}<div class="lvl">${p.level}</div><h4 class="pn">${p.name}</h4><div class="pp">${p.price}</div><ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul><div class="pbg"><button type="button" class="pbtn ${p.featured?'pri':''}" data-plan="${p.name}">Customize Plan</button><button type="button" class="pbtn sec2" data-inq="${p.name}">Inquire Directly</button></div></article>`).join('');
-$('#care-grid').innerHTML=CARE.map(p=>`<article class="plan rv"><h4 class="pn">${p.name}</h4><div class="pp">${p.price}<small> / month</small></div><ul>${p.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul><div class="pbg"><button type="button" class="pbtn" data-care="${p.name}">Inquire About Care</button></div></article>`).join('');
-$('#addon-list').innerHTML=ADDONS.map((a,i)=>`<li class="rv"><span>${a[0]}</span><div class="ap"><b>${a[1]}</b><button type="button" class="atg" data-addon="${i}">+ Add to Quote</button></div></li>`).join('');
-$('#feat-cards').innerHTML=FEATCAT.map((f,i)=>`<div class="fc ${f.on?'on':''}" data-f="${i}" role="checkbox" aria-checked="${f.on}" tabindex="0"><div><div class="fh"><span class="fnm">${f.name}</span><div class="cb"></div></div><div class="fd">${f.desc}</div></div>${f.note?`<span class="infra">⚡ ${f.note}</span>`:''}</div>`).join('');
-Object.keys(OPT).forEach(k=>{$('#c-'+k).innerHTML=OPT[k].map(o=>`<label class="chip"><input type="radio" name="${NAMES[k]}" value="${esc(o[0])}" ${o[0]===DEF[k]?'checked':''}><span>${esc(o[1])}</span></label>`).join('')});
-$('#faq-list').innerHTML=FAQS.map(q=>`<div class="fq rv"><button type="button" aria-expanded="false"><span>${esc(q[0])}</span><i>+</i></button><div class="fa"><p>${esc(q[1])}</p></div></div>`).join('');
-}
-const val=k=>($(`input[name="${NAMES[k]}"]:checked`)||{}).value||DEF[k];
+    function loadFrame(index) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.decoding = "async";
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error(`Could not load ${frameUrl(index)}`));
+        image.src = frameUrl(index);
+      });
+    }
 
-/* estimator */
-function update(){
-const name=$('#client-name').value.trim(),email=$('#client-email').value.trim(),brand=$('#brand-name').value.trim();
-const type=val('type'),pages=val('pages'),anim=val('anim'),budget=val('budget'),time=val('time');
-const feats=FEATCAT.filter(f=>f.on);
-$('#s-client').textContent=(name||email)?`${name||'Client'} (${email||'No email'}) · ${brand?brand+' · ':''}${type}`:`Please enter your name & email above · ${type}`;
-$('#s-scope').textContent=`${pages} · ${type}`;
-$('#s-anim').textContent=`${anim} animations`;
-$('#s-budget').textContent=`${budget} · ${time}`;
-$('#s-feat').textContent=feats.length?feats.map(f=>f.name).join(', '):'None selected';
-const base=BASE[type]||129;let pm=129,days='5–7 business days';
-if(pages.includes('1 page')){pm=type==='Landing page'?69:89;days='3–5 business days'}
-else if(pages.includes('2–5')){pm=Math.max(base,129)}
-else if(pages.includes('6–10')){pm=Math.max(base+100,249);days='7–10 business days'}
-else if(pages.includes('10+')){pm=Math.max(base+280,449);days='2–3 weeks'}
-if(type==='Ecommerce website'&&pm<349){pm=349;days='2–3 weeks'}
-let lo=pm+(ANIM[anim]||0)+feats.reduce((s,f)=>s+(f.cost||25),0);
-addons.forEach(i=>lo+=ADDONS[i][2]);
-const hi=Math.round(lo*1.35);
-$('#s-days').textContent=`(Est. Delivery: ${days})`;
-$('#s-price').innerHTML=(pages.includes('10+')||budget==='Custom quote required')?'Custom Quote<small>Detailed scope required</small>':`$${lo.toLocaleString()} – $${hi.toLocaleString()}<small>USD (Estimated Starting Range)</small>`;
-}
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-/* email routing: mailto + gmail + clipboard fallback */
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2600)}
-async function copyText(text){
-try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true}}catch(e){}
-try{const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,text.length);const ok=document.execCommand('copy');ta.remove();return ok}catch(e){return false}}
-function mailtoUrl(s,b){const body=b.length>1500?b.slice(0,1400)+'\n\n[Brief shortened — please paste the full copied brief here]':b;return `mailto:${MAIL}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(body)}`}
-function gmailUrl(s,b){return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(MAIL)}&su=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`}
-let curText='';
-async function openInquiry(subject,body){
-curText=`To: ${MAIL}\nSubject: ${subject}\n\n${body}`;
-$('#draft').textContent=curText;$('#m-mailto').href=mailtoUrl(subject,body);$('#m-gmail').href=gmailUrl(subject,body);
-const m=$('#mail-modal');m.classList.add('open');m.setAttribute('aria-hidden','false');
-const ok=await copyText(curText);$('#m-copy-l').textContent=ok?'Copied ✓ Copy Again':'Select the text above and copy';
-}
-$('#m-copy').addEventListener('click',async()=>{const ok=await copyText(curText);$('#m-copy-l').textContent=ok?'Project Details Copied! ✓':'Select the text above and copy';if(ok)toast('Brief copied to clipboard');setTimeout(()=>$('#m-copy-l').textContent='Copy Project Details',3000)});
-const closeModal=()=>{const m=$('#mail-modal');m.classList.remove('open');m.setAttribute('aria-hidden','true')};
-$('#mail-close').addEventListener('click',closeModal);
-$('#mail-modal').addEventListener('click',e=>{if(e.target.id==='mail-modal')closeModal()});
-addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
 
-function brief(strict){
-const g=id=>$('#'+id).value.trim();
-const name=g('client-name')||'[Your name]',email=g('client-email')||'[Your email]',brand=g('brand-name')||'N/A',ref=g('reference-url')||'None provided',add=g('additional-requirements')||'None';
-const feats=FEATCAT.filter(f=>f.on).map(f=>f.note?`${f.name} (Note: ${f.note})`:f.name);
-const est=$('#s-price').innerText.replace(/\n/g,' ');
-const L='==================================================';
-return {subject:`New Website Project Inquiry - ${brand!=='N/A'?brand:name}`,body:`Hello DigiFront Door Team,
+      // Draw using CSS-pixel coordinates while retaining sharpness on HiDPI screens.
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawFrame(currentFrame);
+    }
 
-I have customized a project specification on your website and would like to request a formal quote.
+    function drawFrame(index) {
+      const image = frames[index];
+      if (!image) return;
 
-${L}
-1. CUSTOMER INFORMATION
-${L}
-• Name: ${name}
-• Email: ${email}
-• Business / Brand Name: ${brand}
-• Style / Reference URL: ${ref}
+      currentFrame = index;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const imageRatio = image.naturalWidth / image.naturalHeight;
+      const viewportRatio = width / height;
 
-${L}
-2. PROJECT SCOPE & REQUIREMENTS
-${L}
-• Website Type: ${val('type')}
-• Number of Pages: ${val('pages')}
-• Animation Level: ${val('anim')}
-• Target Budget: ${val('budget')}
-• Desired Timeline: ${val('time')}
+      // "contain": shows the entire 16:9 source without cropping.
+      let drawWidth = width;
+      let drawHeight = width / imageRatio;
+      if (viewportRatio < imageRatio) {
+        drawHeight = height;
+        drawWidth = height * imageRatio;
+      }
 
-${L}
-3. SELECTED FEATURES
-${L}
-${feats.length?feats.map(f=>'• '+f).join('\n'):'• Essential standard features only'}
+      const x = (width - drawWidth) / 2;
+      const y = (height - drawHeight) / 2;
 
-${L}
-4. ADDITIONAL REQUIREMENTS
-${L}
-${add}
+      context.clearRect(0, 0, width, height);
+      context.drawImage(image, x, y, drawWidth, drawHeight);
+    }
 
-${L}
-5. ESTIMATED INVESTMENT
-${L}
-• Estimated Development Cost: ${est}
-• Optional Maintenance Care: From $15–$79/month (optional)${addons.size?'\n• Add-ons: '+[...addons].map(i=>ADDONS[i][0]).join(', '):''}
+    function updateFromScroll() {
+      const bounds = animationSection.getBoundingClientRect();
+      const scrollableDistance = animationSection.offsetHeight - window.innerHeight;
+      const progress = Math.max(0, Math.min(1, -bounds.top / scrollableDistance));
+      const nextFrame = Math.round(progress * (FRAME_COUNT - 1));
 
-Looking forward to speaking with you!
+      if (nextFrame !== currentFrame && !animationRequest) {
+        animationRequest = requestAnimationFrame(() => {
+          drawFrame(nextFrame);
+          animationRequest = null;
+        });
+      }
+    }
 
-Best regards,
-${name}
-${email}`}}
-function validate(){
-let ok=true;const n=$('#client-name'),e=$('#client-email');
-const bad=(el,m,f)=>{el.classList.toggle('err',f);$(m).classList.toggle('v',f);if(f)ok=false};
-bad(n,'#name-error',!n.value.trim());
-bad(e,'#email-error',!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.value.trim()));
-if(!ok)(n.classList.contains('err')?n:e).scrollIntoView({behavior:'smooth',block:'center'});
-return ok}
+    async function initialize() {
+      try {
+        // Loading in batches avoids creating 240 simultaneous network requests.
+        const batchSize = 12;
+        for (let start = 0; start < FRAME_COUNT; start += batchSize) {
+          const end = Math.min(start + batchSize, FRAME_COUNT);
+          const batch = await Promise.all(
+            Array.from({ length: end - start }, (_, offset) => loadFrame(start + offset))
+          );
+          frames.push(...batch);
 
-/* interactions */
-function setup(){
-const flash=(el,t)=>{};
-document.addEventListener('click',e=>{
-const t=e.target.closest('button,[data-f]');if(!t)return;
-if(t.dataset.plan){const p=DEV.find(x=>x.name===t.dataset.plan);
-[['website-type',p.type],['page-count',p.page],['animation-level',p.anim]].forEach(([n,v])=>{const r=$(`input[name="${n}"][value="${v}"]`);if(r)r.checked=true});
-update();$('#planner').scrollIntoView({behavior:'smooth'})}
-else if(t.dataset.inq){const p=DEV.find(x=>x.name===t.dataset.inq);openInquiry(`Website Inquiry: ${p.name} (${p.price})`,`Hello DigiFront Door Team,\n\nI would like to inquire about your ${p.name} package (${p.price}).\n\nClient Name:\nEmail:\nCompany:\nBrief Project Overview:\n\nBest regards,`)}
-else if(t.dataset.care){const p=CARE.find(x=>x.name===t.dataset.care);openInquiry(`Maintenance Care Inquiry: ${p.name} (${p.price}/mo)`,`Hello DigiFront Door Team,\n\nI would like to discuss your ${p.name} maintenance plan (${p.price}/month).\n\nWebsite URL:\nOwner Name:\nSpecific Needs:\n\nThank you!`)}
-else if(t.dataset.addon!==undefined){const i=+t.dataset.addon;if(addons.has(i)){addons.delete(i);t.classList.remove('added');t.textContent='+ Add to Quote'}else{addons.add(i);t.classList.add('added');t.textContent='✓ Added to Quote'}update()}
-else if(t.dataset.style){$('#reference-url').value=`Inspiration Style: ${t.dataset.style}`;update();$('#planner').scrollIntoView({behavior:'smooth'})}
-else if(t.classList.contains('vb')){$$('.vb',t.parentNode).forEach(b=>b.classList.remove('active'));t.classList.add('active');$('#cv'+t.dataset.c).classList.toggle('mob',t.dataset.v==='m')}
-else if(t.closest('.fq')&&t.tagName==='BUTTON'){const it=t.closest('.fq'),a=$('.fa',it),open=it.classList.contains('active');
-$$('.fq.active').forEach(o=>{o.classList.remove('active');$('button',o).setAttribute('aria-expanded','false');$('.fa',o).style.maxHeight=null});
-if(!open){it.classList.add('active');t.setAttribute('aria-expanded','true');a.style.maxHeight=a.scrollHeight+'px'}}
-});
-const tog=c=>{const i=+c.dataset.f,f=FEATCAT[i];f.on=!f.on;c.classList.toggle('on',f.on);c.setAttribute('aria-checked',f.on);update()};
-$$('.fc').forEach(c=>{c.addEventListener('click',()=>tog(c));c.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();tog(c)}})});
-['client-name','client-email','brand-name','reference-url'].forEach(id=>$('#'+id).addEventListener('input',update));
-$$('#proj-form input[type=radio]').forEach(r=>r.addEventListener('change',update));
-$('#btn-edit').addEventListener('click',()=>{$('#step-contact').scrollIntoView({behavior:'smooth'});$('#client-name').focus({preventScroll:true})});
-$('#btn-reset').addEventListener('click',()=>{if(!confirm('Reset custom website order planner to defaults?'))return;
-$('#proj-form').reset();FEATCAT.forEach(f=>f.on=['Contact form','SEO setup','Website speed optimization'].includes(f.name));
-$$('.fc').forEach(c=>{const f=FEATCAT[+c.dataset.f];c.classList.toggle('on',f.on);c.setAttribute('aria-checked',f.on)});
-addons.clear();$$('.atg').forEach(b=>{b.classList.remove('added');b.textContent='+ Add to Quote'});update()});
-$('#proj-form').addEventListener('submit',e=>{e.preventDefault();if(!validate())return;const b=brief();openInquiry(b.subject,b.body)});
-$('#btn-copy-brief').addEventListener('click',async()=>{const b=brief();const ok=await copyText(`To: ${MAIL}\nSubject: ${b.subject}\n\n${b.body}`);toast(ok?'Brief copied to clipboard':'Copy failed — use Request Custom Quote instead')});
-$('#contact-link').addEventListener('click',e=>{e.preventDefault();openInquiry('Website Development Inquiry - DigiFront Door',`Hello DigiFront Door Team,\n\nI would like to discuss a website development project.\n\nMy Name:\nCompany / Brand:\nProject Type:\nTarget Budget:\n\nPlease let me know how we can proceed.\n\nBest regards,`)});
-}
+          const percent = Math.round((frames.length / FRAME_COUNT) * 100);
+          loadingText.textContent = `${percent}%`;
+          progressBar.style.width = `${percent}%`;
+        }
 
-/* reveal + active nav */
-function observe(){
-const io=new IntersectionObserver((es,o)=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');o.unobserve(en.target)}}),{threshold:.08});
-$$('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4)*.08+'s';io.observe(el)});
-const links=$$('#pill-nav a'),map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
-const so=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const a=map.get(en.target.id);if(!a)return;links.forEach(l=>l.classList.remove('active'));a.classList.add('active');
-const nav=$('#pill-nav');nav.scrollTo({left:a.offsetLeft-16,behavior:'smooth'})}}),{rootMargin:'-35% 0px -55% 0px'});
-$$('main > section[id], footer[id]').forEach(s=>so.observe(s));
-}
+        resizeCanvas();
+        drawFrame(0);
+        loading.classList.add("is-hidden");
+        updateFromScroll();
+      } catch (error) {
+        loadingText.textContent = "Unable to load frames";
+        console.error(error);
+      }
+    }
 
-/* hero text + wordmark reveal */
-function intro(){
-const wm=$('#wm'),t=wm.textContent.trim();wm.setAttribute('aria-label',t);wm.innerHTML='';
-[...t].forEach((c,i)=>{const w=document.createElement('span');w.className='lw';w.setAttribute('aria-hidden','true');const s=document.createElement('span');s.className='li';s.textContent=c===' '?'\u00A0':c;s.style.animationDelay=i*.08+'s';w.appendChild(s);wm.appendChild(w)});
-const h=$('.hero-title'),parts=h.innerHTML.split(/(\s+|<br\s*\/?>)/i);h.innerHTML='';let n=0;
-parts.forEach(p=>{if(!p.trim())h.appendChild(document.createTextNode(' '));else if(/^<br/i.test(p))h.appendChild(document.createElement('br'));else{const w=document.createElement('span');w.className='ww';const s=document.createElement('span');s.className='wi';s.textContent=p;s.style.animationDelay=n++*.1+'s';w.appendChild(s);h.appendChild(w)}});
-}
-
-/* LERP cursor (fine pointers only) */
-function cursor(){
-if(matchMedia('(pointer: coarse)').matches)return;
-const card=$('#gcard'),ring=$('#ring');let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my,sc=0,ts=0,first=true,hov=false;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(first){cx=mx;cy=my;first=false;card.classList.add('active');ring.classList.add('active')}if(!hov)ts=1});
-document.addEventListener('mouseleave',()=>ts=0);
-document.addEventListener('mouseover',e=>{hov=!!e.target.closest('a,button,input,textarea,label,.fc,.chip');ts=hov?0:1});
-(function f(){cx+=(mx-cx)*.08;cy+=(my-cy)*.08;sc+=(ts-sc)*.15;
-card.style.transform=`translate3d(${cx}px,${cy}px,0) translate(-50%,-50%) scale(${sc})`;
-ring.style.transform=`translate3d(${mx}px,${my}px,0) translate(-50%,-50%) scale(${sc})`;requestAnimationFrame(f)})();
-}
-
-document.addEventListener('DOMContentLoaded',()=>{intro();render();setup();update();observe();cursor()});
-</script>
+    window.addEventListener("scroll", updateFromScroll, { passive: true });
+    window.addEventListener("resize", resizeCanvas);
+    initialize();
+  </script>
 </body>
 </html>
